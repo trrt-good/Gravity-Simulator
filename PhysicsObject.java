@@ -85,4 +85,14 @@ public class PhysicsObject
             addForce(Vector.scaledDifference(position, PhysicsManager.gravityObjects.get(i).position, (PhysicsManager.gravityObjects.get(i).mass*mass)/Vector.distance(position, PhysicsManager.gravityObjects.get(i).position)), 0);
         }
     }
+
+    private void updatePosition() //changes the position of the opject based off velocity 
+    {
+        position = Vector.add(position, velocity);
+    }
+
+    private void updateRotation() //changes the rotation based off velocity
+    {
+        
+    }
 }

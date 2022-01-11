@@ -30,7 +30,7 @@ public class Vector
         return new Vector(x/getMagnitude(), y/getMagnitude());
     }
 
-    public double getDirection() //returns the angle of the vector (0, 1) is 0 degrees 
+    public double getDirection() //returns the angle of the vector (1, 0) is 0 degrees 
     {
         if (x == 0 && y == 0)
             return 0.0;
@@ -53,9 +53,24 @@ public class Vector
 
     //static methods: 
 
-    public static double distance(Vector pos1, Vector pos2)
+    public static double distance(Vector pos1, Vector pos2) //returns the distance between two vectors 
     {
         return Math.sqrt((pos1.x-pos2.x)*(pos1.x-pos2.x) + (pos1.y-pos2.y)*(pos1.y-pos2.y));
     }
 
+    public static Vector difference(Vector pos1, Vector pos2) //returns the difference between two vectors 
+    {
+        return new Vector(pos1.x-pos2.x, pos1.y-pos2.y);
+    }
+
+    public static Vector scaledDifference(Vector pos1, Vector pos2, double magnitude) //returns the difference between vectors but scaled to the specified magnitude
+    {
+        double mult = magnitude/Math.sqrt((pos1.x-pos2.x)*(pos1.x-pos2.x)+(pos1.y-pos2.y)*(pos1.y-pos2.y));
+        return new Vector((pos1.x-pos2.x)*mult, (pos1.y-pos2.y)*mult);
+    }
+
+    public static Vector add(Vector pos1, Vector pos2) //adds two vectors together
+    {
+        return new Vector(pos1.x+pos2.x, pos1.y+pos2.y);
+    }
 }

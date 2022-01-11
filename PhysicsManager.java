@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 import java.util.List;
 public class PhysicsManager //will manage the physics/gravity objects and preform physics updates 
 {
