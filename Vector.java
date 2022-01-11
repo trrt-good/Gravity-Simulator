@@ -1,0 +1,61 @@
+public class Vector
+{
+    public double x;
+    public double y;
+
+    public Vector(double xPos, double yPos)
+    {
+        x = xPos;
+        y = yPos;
+    }
+
+    public Vector(Vector vectorIn)
+    {
+        x = vectorIn.x;
+        y = vectorIn.y;
+    }
+
+    public double getMagnitude() //returns the magnitude of the vector 
+    {
+        return Math.sqrt(getSqrMagnitude());
+    }
+
+    public double getSqrMagnitude() //returns the squared form of the magnitude for specific cases (much faster for computer)
+    {
+        return x*x+y*y;
+    }
+
+    public Vector getNormalized() //returns a vector scaled to the magnitude of 1 (doesn't change any values in the object)
+    {
+        return new Vector(x/getMagnitude(), y/getMagnitude());
+    }
+
+    public double getDirection() //returns the angle of the vector (0, 1) is 0 degrees 
+    {
+        if (x == 0 && y == 0)
+            return 0.0;
+        if (y == 0)
+        {
+            if (x > 0)
+                return 0.0;
+            if (x < 0)
+                return 180.0;
+        }
+        else if (x == 0)
+        {
+            if (y > 0)
+                return 90.0;
+            if (y < 0)
+                return 270;
+        }
+        return Math.toDegrees(Math.atan(y/x));
+    }
+
+    //static methods: 
+
+    public static double distance(Vector pos1, Vector pos2)
+    {
+        return Math.sqrt((pos1.x-pos2.x)*(pos1.x-pos2.x) + (pos1.y-pos2.y)*(pos1.y-pos2.y));
+    }
+
+}
