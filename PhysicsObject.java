@@ -82,7 +82,7 @@ public class PhysicsObject
         int i = 0;
         for (i = 0; i < PhysicsManager.gravityObjects.size(); i++)
         {
-
+            addForce(Vector.scaledDifference(position, PhysicsManager.gravityObjects.get(i).position, (PhysicsManager.gravityObjects.get(i).mass*mass)/Vector.distance(position, PhysicsManager.gravityObjects.get(i).position)), 0);
         }
     }
 }
