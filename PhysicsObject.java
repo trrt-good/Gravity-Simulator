@@ -70,9 +70,17 @@ public class PhysicsObject
     {
         if (velocity.getMagnitude() != 0)
         {
-            double multiplier = (velocity.getMagnitude()-0.5*airDensity*velocity.getSqrMagnitude()*drag*PhysicsManager.FIXED_TIME_STEP)/velocity.getMagnitude();
+            double multiplier = (velocity.getMagnitude()-(0.5*airDensity*velocity.getSqrMagnitude())*drag*PhysicsManager.FIXED_TIME_STEP)/velocity.getMagnitude();
             velocity.x *= multiplier;
             velocity.y *= multiplier;
+        }
+    }
+
+    private void applyAngularDrag()
+    {
+        if (angularVelocity !=0 )
+        {
+            
         }
     }
 
@@ -88,11 +96,11 @@ public class PhysicsObject
 
     private void updatePosition() //changes the position of the opject based off velocity 
     {
-        position = Vector.add(position, velocity);
+        position = Vector.add(position, Vector.multiply(velocity, PhysicsManager.fixedDeltaTime));
     }
 
     private void updateRotation() //changes the rotation based off velocity
     {
-        
+        rotation = rotation + angularVelocity*PhysicsManager.fixedDeltaTime;
     }
 }

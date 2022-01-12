@@ -73,4 +73,14 @@ public class Vector
     {
         return new Vector(pos1.x+pos2.x, pos1.y+pos2.y);
     }
+
+    public static Vector setMagnitude(Vector pos1, double newMag)
+    {
+        return new Vector(pos1.x*(newMag/Math.sqrt(pos1.x*pos1.x+pos1.y*pos1.y)), pos1.y*(newMag/Math.sqrt(pos1.x*pos1.x+pos1.y*pos1.y)));
+    }
+
+    public static Vector multiply(Vector pos1, double multiplier)
+    {
+        return new Vector(pos1.x*multiplier, pos1.y*multiplier);
+    }
 }
