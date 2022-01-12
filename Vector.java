@@ -51,6 +51,11 @@ public class Vector
         return Math.toDegrees(Math.atan(y/x));
     }
 
+    public String toString()
+    {
+        return String.format("(%.1f,%.1f)", x, y);
+    }
+
     //static methods: 
 
     public static double distance(Vector pos1, Vector pos2) //returns the distance between two vectors 
