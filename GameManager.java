@@ -4,7 +4,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 public class GameManager //will manage the physics/gravity objects and preform physics updates 
 {
-    static Render renderer = new Render();
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
@@ -35,8 +34,6 @@ public class GameManager //will manage the physics/gravity objects and preform p
                     physicsObjects.get(i).applyAngularDrag();
                     physicsObjects.get(i).applyGravity();
                     physicsObjects.get(i).updatePosition();
-                    renderer.pos1 = physicsObjects.get(i).position;
-                    renderer.pos2 = physicsObjects.get(i).prevPosition;
                     physicsObjects.get(i).updateRotation();
                     System.out.print(physicsObjects.get(i).velocity.toString());
                     System.out.println(physicsObjects.get(i).position.toString());

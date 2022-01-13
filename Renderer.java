@@ -1,11 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
-public class Render extends JFrame 
+public class Renderer extends JFrame 
 {
-    Vector pos1 = new Vector(0, 0);
-    Vector pos2 = new Vector(0, 0);
-
-    Render()
+    Renderer()
     {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000,1000); // 
@@ -16,6 +13,6 @@ public class Render extends JFrame
     public void paintLine(Graphics2D g)
     {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawLine((int)pos1.x + 500, (int)pos1.y + 500, (int)pos2.x + 500, (int)pos2.y + 500);
+        
     }
 }
