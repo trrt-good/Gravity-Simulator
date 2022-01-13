@@ -78,7 +78,6 @@ public class PhysicsObject
             if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
             {
                 double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce*3)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
-                System.out.println(multiplier);
                 velocity.x *= multiplier;
                 velocity.y *= multiplier;
             }
