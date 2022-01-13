@@ -2,24 +2,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-public class GameManager //will manage the physics/gravity objects and preform physics updates 
+import javax.swing.*;
+public class GameManager extends JFrame  //will manage the physics/gravity objects and preform physics updates 
 {
-    static Render renderer = new Render();
+    public static final int FPS = 100;
+
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
-    public static final double FIXED_TIME_STEP = 0.02; //used for physics updates 0.02 sec or 20 ms 
-    public static double timeScale = 1.0; //time scale 
-    public static double fixedDeltaTime = 0.02; //used by methods which are time-based because it changes with time scale
+    public static final double FIXED_TIME_STEP = 0.02; // used by time-based calculations
+    public static double fixedDeltaTime = 0.02; //time between each physics update
+
+    private Rendering renderer;
+
+    public GameManager() 
+    {
+        renderer = new Rendering(FPS, 1);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.add(renderer);
+		this.pack();
+        this.setTitle("Game");
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+    }
 
     public static void main (String [] args)
     {
-        PhysicsObject pObject = new PhysicsObject(new Vector(0, 1000), 10, 0.05, 0, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 100000.0);
-        pObject.addForce(new Vector(100, 0), 1);
-        
+        new GameManager();
+        PhysicsObject pObject1 = new PhysicsObject(new Vector(0, 300), 10, 0.05, 0.05, false, false, true, new Vector(0,0));
+        PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -300), 10, 0.05, 0.05, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 150);
+        gObject.mass = gObject.estimateMass();
+        pObject1.addForce(new Vector(500, 0), 1);
+        pObject2.addForce(new Vector(-500, 0), 1);
         start();
     }
+
 
     public static void start()
     {
@@ -35,28 +53,12 @@ public class GameManager //will manage the physics/gravity objects and preform p
                     physicsObjects.get(i).applyAngularDrag();
                     physicsObjects.get(i).applyGravity();
                     physicsObjects.get(i).updatePosition();
-                    renderer.pos1 = physicsObjects.get(i).position;
-                    renderer.pos2 = physicsObjects.get(i).prevPosition;
                     physicsObjects.get(i).updateRotation();
-                    System.out.print(physicsObjects.get(i).velocity.toString());
-                    System.out.println(physicsObjects.get(i).position.toString());
+                    physicsObjects.get(i).checkCollisions();
                 }
             }
         };
         timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000));
     }
 
-    public static void setTimeScale(double timeScaleIn) //method for changing the time scale: 0 = time practically stops, 1 = normal speed, 0.5 = 2 times slower
-    {
-        timeScale = Math.abs(timeScaleIn);
-        if (timeScale != 0)
-            fixedDeltaTime = FIXED_TIME_STEP/timeScale;
-        else 
-        {
-            timeScale = Double.MIN_VALUE;
-            fixedDeltaTime = FIXED_TIME_STEP/timeScale;
-        }
-    }
-
-    
 }

@@ -1,6 +1,6 @@
 public class PhysicsObject
 {
-    private double airDensity = 1.225; //temporary variable, will be moved to a different class later. 
+    private double surfaceAirDensity = 1.225;
 
     public Vector position; //global position of the PhysicsObject as a vector 
     public Vector prevPosition; //position before the last physics update
@@ -71,19 +71,26 @@ public class PhysicsObject
 
     public void applyDrag() //applies drag by decreasing velocity. Called each physics update 
     {
-        if (velocity.getMagnitude() != 0)
+        int i = 0;
+        for (i = 0; i < GameManager.gravityObjects.size(); i++)
         {
-            double multiplier = (velocity.getMagnitude()-(0.5*airDensity*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
-            velocity.x *= multiplier;
-            velocity.y *= multiplier;
+            double surfaceGForce = (GameManager.gravityObjects.get(i).mass*mass)/Math.pow(GameManager.gravityObjects.get(i).diameter/2, 2);
+            if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
+            {
+                double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce*3)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
+                System.out.println(multiplier);
+                velocity.x *= multiplier;
+                velocity.y *= multiplier;
+            }
         }
+        
     }
 
     public void applyAngularDrag()
     {
         if (angularVelocity !=0 )
         {
-            angularVelocity = angularVelocity-0.5*airDensity*angularVelocity*angularVelocity*angularDrag;
+            angularVelocity = angularVelocity-0.5*surfaceAirDensity*angularVelocity*angularVelocity*angularDrag;
         }
     }
 
@@ -95,6 +102,7 @@ public class PhysicsObject
         {
             addForce(Vector.scaledDifference(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position, -(GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)), 0);
         }
+        
     }
 
     public void updatePosition() //changes the position of the opject based off velocity 
@@ -107,5 +115,25 @@ public class PhysicsObject
     {
         if (freezeRotation == true) return;
         rotation = rotation + angularVelocity*GameManager.fixedDeltaTime;
+    }
+
+    public void checkCollisions()
+    {
+        int i = 0;
+        for (i = 0; i < GameManager.gravityObjects.size(); i++)
+        {
+            if (Vector.distance(position, GameManager.gravityObjects.get(i).position) <= GameManager.gravityObjects.get(i).diameter/2)
+            {
+                velocity.x = 0;
+                velocity.y = 0;
+                effectedByGravity = false;
+                freezeRotation = true;
+            } 
+            else
+            {
+                effectedByGravity = true;
+                freezeRotation = false;
+            }
+        }
     }
 }
