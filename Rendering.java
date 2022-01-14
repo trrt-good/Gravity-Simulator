@@ -31,7 +31,7 @@ public class Rendering extends JPanel implements ActionListener{
 
         for (int i = 0; i < GameManager.gravityObjects.size(); i++)
         {
-            g2D.drawOval((int)(GameManager.gravityObjects.get(i).position.x*scale + PANEL_WIDTH/2 - GameManager.gravityObjects.get(i).diameter/2), (int)(GameManager.gravityObjects.get(i).position.y*scale + PANEL_HEIGHT/2 - GameManager.gravityObjects.get(i).diameter/2), (int)(GameManager.gravityObjects.get(i).diameter*scale), (int)(GameManager.gravityObjects.get(i).diameter*scale));
+            g2D.drawOval((int)(GameManager.gravityObjects.get(i).position.x*scale + PANEL_WIDTH/2 - GameManager.gravityObjects.get(i).diameter*scale/2), (int)(GameManager.gravityObjects.get(i).position.y*scale + PANEL_HEIGHT/2 - GameManager.gravityObjects.get(i).diameter*scale/2), (int)(GameManager.gravityObjects.get(i).diameter*scale), (int)(GameManager.gravityObjects.get(i).diameter*scale));
         }
 	}
 	

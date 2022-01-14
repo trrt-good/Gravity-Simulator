@@ -19,7 +19,6 @@ public class GravityObject
 
     public double estimateMass() //gives an approximate mass based off diameter using the density of earth
     {
-        System.out.println((4/3)*Math.PI*Math.pow(diameter/2, 3)*5.51); 
-        return (4/3)*Math.PI*Math.pow(diameter/2, 3)*5.51;
+        return Math.PI*Math.pow(diameter/2, 3);
     }
 }

@@ -17,7 +17,7 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
 
     public GameManager() 
     {
-        renderer = new Rendering(FPS, 1.0);
+        renderer = new Rendering(FPS, 1);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(renderer);
 		this.pack();
@@ -29,9 +29,9 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
     public static void main (String [] args)
     {
         new GameManager();
-        PhysicsObject pObject1 = new PhysicsObject(new Vector(0, 400), 10, 0.05, 0.1, false, false, true, new Vector(0,0));
-        PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -400), 10, 0.05, 0.1, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 7302730.0, 150);
+        PhysicsObject pObject1 = new PhysicsObject(new Vector(0, 300), 10, 0.05, 0.05, false, false, true, new Vector(0,0));
+        PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -300), 10, 0.05, 0.05, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 150);
         gObject.mass = gObject.estimateMass();
         pObject1.addForce(new Vector(500, 0), 1);
         pObject2.addForce(new Vector(-500, 0), 1);
