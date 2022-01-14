@@ -82,8 +82,7 @@ public class PhysicsObject
                 velocity.x *= multiplier;
                 velocity.y *= multiplier;
             }
-        }
-        
+        } 
     }
 
     public void applyAngularDrag()
@@ -108,13 +107,13 @@ public class PhysicsObject
     public void updatePosition() //changes the position of the opject based off velocity 
     {
         prevPosition = position;
-        position = Vector.add(position, Vector.multiply(velocity, GameManager.fixedDeltaTime));
+        position = Vector.add(position, Vector.multiply(velocity, GameManager.FIXED_TIME_STEP));
     }
 
     public void updateRotation() //changes the rotation based off velocity 
     {
         if (freezeRotation == true) return;
-        rotation = rotation + angularVelocity*GameManager.fixedDeltaTime;
+        rotation = rotation + angularVelocity*GameManager.FIXED_TIME_STEP;
     }
 
     public void checkCollisions()

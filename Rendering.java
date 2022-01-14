@@ -10,7 +10,7 @@ public class Rendering extends JPanel implements ActionListener{
 
 	private Timer timer;
 
-	Rendering(int fpsIn, double scaleIn) //instantiate after other classes
+	public Rendering(int fpsIn, double scaleIn) //instantiate after other classes
     {
 		this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT));
 		this.setBackground(Color.white);

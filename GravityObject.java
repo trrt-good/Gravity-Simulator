@@ -1,5 +1,3 @@
-import javax.naming.spi.DirectoryManager;
-
 public class GravityObject 
 {
     public Vector position; //position of the object

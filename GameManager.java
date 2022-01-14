@@ -5,7 +5,7 @@ import java.util.TimerTask;
 import javax.swing.*;
 public class GameManager extends JFrame  //will manage the physics/gravity objects and preform physics updates 
 {
-    public static final int FPS = 100;
+    public static final int FPS = 500;
 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
@@ -33,8 +33,8 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
         PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -300), 10, 0.05, 0.05, false, false, true, new Vector(0,0));
         GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 150);
         gObject.mass = gObject.estimateMass();
-        pObject1.addForce(new Vector(500, 0), 1);
-        pObject2.addForce(new Vector(-500, 0), 1);
+        pObject1.addForce(new Vector(1000, 0), 1);
+        pObject2.addForce(new Vector(-1000, 0), 1);
         start();
     }
 
