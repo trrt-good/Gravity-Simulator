@@ -20,9 +20,11 @@ public class PhysicsObject
     public boolean freezeRotation; //freezes rotation if true 
     public boolean effectedByGravity; //should this PhysicsObject be effected by Gravity?
 
+
+    //constructor 
     public PhysicsObject(Vector posIn, double massIn, double angDragIn, double dragIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, Vector centOfMassIn)
     {
-        GameManager.physicsObjects.add(this);
+        GameManager.physicsObjects.add(this); //adds this object to the list of physics objects in the game manager class when it is constructed
         position = new Vector(posIn);
         mass = massIn;
         drag = dragIn;
@@ -67,7 +69,11 @@ public class PhysicsObject
         rotation = angleIn;
     }
 
-    //methods used in physics updates:
+
+
+//========================== METHODS USED IN PHYSICS UPDATES ============================
+
+
 
     public void applyDrag() //applies drag by decreasing velocity. Called each physics update 
     {
@@ -77,8 +83,7 @@ public class PhysicsObject
             double surfaceGForce = (GameManager.gravityObjects.get(i).mass*mass)/Math.pow(GameManager.gravityObjects.get(i).diameter/2, 2);
             if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
             {
-                double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce*3)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
-                System.out.println(multiplier);
+                double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(),GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce*3)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
                 velocity.x *= multiplier;
                 velocity.y *= multiplier;
             }
@@ -97,17 +102,22 @@ public class PhysicsObject
     {
         if (!effectedByGravity) return;
         int i = 0;
-        for (i = 0; i < GameManager.gravityObjects.size(); i++)
+        for (i = 0; i < GameManager.gravityObjects.size(); i++) //applies gravity for each gravity object
         {
-            addForce(Vector.scaledDifference(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position, -(GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)), 0);
+            addForce( //adds force to this object based off the vector 
+                Vector.scaledDifference( //returns a vector that's x and y fields are the difference between two specified positions, then scaled proportionally to the specified magnitude 
+                    getWorldCenterOfMass(), //position of this object's center of mass
+                    GameManager.gravityObjects.get(i).position, //position of the gravity object
+                    -(GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)), 0); 
+                    //^ the magnitude of the force of gravity, calculated by the formula (m1*m2)/d^2   
         }
         
     }
 
     public void updatePosition() //changes the position of the opject based off velocity 
     {
-        prevPosition = position;
-        position = Vector.add(position, Vector.multiply(velocity, GameManager.FIXED_TIME_STEP));
+        prevPosition = position; //sets the prevposition field before it does calculations 
+        position = Vector.add(position, Vector.multiply(velocity, GameManager.FIXED_TIME_STEP)); 
     }
 
     public void updateRotation() //changes the rotation based off velocity 
@@ -119,17 +129,20 @@ public class PhysicsObject
     public void checkCollisions()
     {
         int i = 0;
-        for (i = 0; i < GameManager.gravityObjects.size(); i++)
+        for (i = 0; i < GameManager.gravityObjects.size(); i++) //checks collisions against each gravity object
         {
+            //true if the distance between this object and the gravity object is less than the radius of gravity object
             if (Vector.distance(position, GameManager.gravityObjects.get(i).position) <= GameManager.gravityObjects.get(i).diameter/2)
             {
+                //freezes the object
                 velocity.x = 0;
                 velocity.y = 0;
-                effectedByGravity = false;
+                effectedByGravity = false; 
                 freezeRotation = true;
             } 
             else
             {
+                //un freezes
                 effectedByGravity = true;
                 freezeRotation = false;
             }
