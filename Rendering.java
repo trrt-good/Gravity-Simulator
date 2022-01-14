@@ -8,19 +8,20 @@ public class Rendering extends JPanel implements ActionListener{
 
 	public Vector offset; //offsets the position of objects that are rendered. (0,0) is centered
 
-	public PhysicsObject focusObject; //the object will focus on this object 
+	public PhysicsObject targetObject; //the object will focus on this object 
 
     public double scale; //scales the objects displayed bigger or smaller 1 is real size
 
 	private Timer timer; //timer class for timing fps 
 
-	public Rendering(int fpsIn, double scaleIn, Vector offsetIn) //constructor which sets up the timer 
+	public Rendering(int fpsIn, double scaleIn, Vector offsetIn, PhysicsObject focusObjectIn) //constructor which sets up the timer 
     {
 		this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT));
 		this.setBackground(Color.white);
         scale = scaleIn;
 		timer = new Timer(1000/fpsIn + 1, this);
 		offset = new Vector(offsetIn);
+		targetObject = focusObjectIn;
 		timer.start(); //starts the timer to repaint the panel every n milliseconds
 	}
 
@@ -54,6 +55,10 @@ public class Rendering extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) //this action is reapeated repeatidly based off fps value 
     {
+		if (targetObject != null)
+			offset = targetObject.position;
+		else
+			offset = new Vector(0, 0);
 		repaint(); //repaints the pannel 
 	}
 }

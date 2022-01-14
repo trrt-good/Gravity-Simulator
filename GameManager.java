@@ -5,10 +5,12 @@ import java.util.TimerTask;
 import javax.swing.*;
 public class GameManager extends JFrame  //will manage the physics/gravity objects and preform physics updates 
 {
-    public static final int FPS = 1001; // FPS for the game
+    public static final int FPS = 500; // FPS for the game
 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
+
+    private static GameManager gm;
 
     public static final double FIXED_TIME_STEP = 0.02; // used by time based calculations 
     public static double fixedDeltaTime = 0.02; //time between each physics update is called
@@ -27,7 +29,7 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
 
     public GameManager() //constructor which sets up JFrame
     {
-        renderer = new Rendering(FPS, 1, new Vector(0, 0));
+        renderer = new Rendering(FPS, 1, new Vector(0, 0), null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(renderer);
 		this.pack();
@@ -38,16 +40,20 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
 
     public static void main (String [] args)
     {
-        new GameManager(); //constructs a game manager which creates the JFrame and starts the rendering process
+        gm = new GameManager(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        PhysicsObject pObject1 = new PhysicsObject(new Vector(0, 300), 10, 0.05, 0.0, false, false, true, new Vector(0,0));
-        PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -300), 10, 0.05, 0.0, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 150);
+        PhysicsObject pObject1 = new PhysicsObject(new Vector(0, 200), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
+        PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -200), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 300, true);
+        gm.renderer.targetObject = pObject2;
+        gm.renderer.scale = 4;
         gObject.mass = gObject.estimateMass();
-        pObject1.addForce(new Vector(1000, 0), 1);
-        pObject2.addForce(new Vector(-1000, 0), 1);
+        pObject1.addForce(new Vector(200, 200), 1);
+        pObject2.addForce(new Vector(-200, -200), 1);
         //#endregion
+
+        
 
         startPhysicsUpdates(); //starts the physics updates 
     }
@@ -58,10 +64,10 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() 
         { 
-            public void run()
+            public void run() 
             {
                 int i = 0;
-                for (i = 0; i < physicsObjects.size(); i++)
+                for (i = 0; i < physicsObjects.size(); i++) //runs physics update methods for each physicsObject
                 {
                     physicsObjects.get(i).applyDrag();
                     physicsObjects.get(i).applyAngularDrag();
@@ -72,7 +78,7 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
                 }
             }
         };
-        timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000));
+        timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000)); //runs the method above at a constant rate 
     }
 
 }

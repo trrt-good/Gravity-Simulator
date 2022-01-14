@@ -1,25 +1,27 @@
 public class PhysicsObject
 {
-    private double surfaceAirDensity = 1.225;
+    private double surfaceAirDensity = 1.225; //air density at the surface of a gravity object
 
-    public Vector position; //global position of the PhysicsObject as a vector 
-    public Vector prevPosition; //position before the last physics update
+    public Vector position = new Vector(0, 0); //global position of the PhysicsObject as a vector 
+    public Vector prevPosition = new Vector(0, 0); //position before the last physics update
     //local position is always 0,0
     public double rotation = 0.0; //rotation of the PhysicsObject in degrees
 
-    public double mass; //Mass of the PhysicsObject (in metric tons)
-    public Vector centerOfMass; //The center of mass of the PhysicsObject in local space
+    public double mass = 10; //Mass of the PhysicsObject 
+    public Vector centerOfMass = new Vector(0, 0); //The center of mass of the PhysicsObject in local space
 
-    public double drag; //Coefficient of drag
+    public double drag = 0.01; //Coefficient of drag
     public double angularDrag = 0.05; //Coefficient of angular drag
 
     public double angularVelocity = 0; //angular velocity in degrees per second 
     public Vector velocity = new Vector(0, 0); //Linear velocity of the PhysicsObject in units/sec
 
-    public boolean isKinematic; //should this PhysicsObject be taken out of physics control?
-    public boolean freezeRotation; //freezes rotation if true 
-    public boolean effectedByGravity; //should this PhysicsObject be effected by Gravity?
+    public boolean isKinematic = false; //should this PhysicsObject be taken out of physics control?
+    public boolean freezeRotation = false; //freezes rotation if true 
+    public boolean effectedByGravity = true; //should this PhysicsObject be effected by Gravity?
 
+    //no arg constructor
+    public PhysicsObject(){}
 
     //constructor 
     public PhysicsObject(Vector posIn, double massIn, double angDragIn, double dragIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, Vector centOfMassIn)
@@ -77,15 +79,19 @@ public class PhysicsObject
 
     public void applyDrag() //applies drag by decreasing velocity. Called each physics update 
     {
+        if (drag == 0) return;
         int i = 0;
         for (i = 0; i < GameManager.gravityObjects.size(); i++)
         {
-            double surfaceGForce = (GameManager.gravityObjects.get(i).mass*mass)/Math.pow(GameManager.gravityObjects.get(i).diameter/2, 2);
-            if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
+            if (GameManager.gravityObjects.get(i).hasAtmosphere == true)
             {
-                double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(),GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce*3)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
-                velocity.x *= multiplier;
-                velocity.y *= multiplier;
+                double surfaceGForce = (GameManager.gravityObjects.get(i).mass*mass)/Math.pow(GameManager.gravityObjects.get(i).diameter/2, 2);
+                if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
+                {
+                    double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(),GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
+                    velocity.x *= multiplier;
+                    velocity.y *= multiplier;
+                }
             }
         } 
     }
