@@ -3,7 +3,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
-public class GameManager extends JFrame  //will manage the physics/gravity objects and preform physics updates 
+import java.awt.event.*;
+import java.awt.Color;
+public class GameManager extends JFrame implements KeyListener  //will manage the physics/gravity objects and preform physics updates 
 {
     public static final int FPS = 500; // FPS for the game
 
@@ -13,7 +15,9 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
     private static GameManager gm;
 
     public static final double FIXED_TIME_STEP = 0.02; // used by time based calculations 
-    public static double fixedDeltaTime = 0.02; //time between each physics update is called
+    public static double fixedDeltaTime = 0.002; //time between each physics update is called
+
+    private static PhysicsObject focusObj;
 
     /* 
     DO NOT CHANGE FIXED_TIME_STEP ON IT'S OWN
@@ -29,11 +33,12 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
 
     public GameManager() //constructor which sets up JFrame
     {
-        renderer = new Rendering(FPS, 1, new Vector(0, 0), null);
+        renderer = new Rendering(FPS, 0.5, new Vector(0, 0), null, 4);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(renderer);
 		this.pack();
         this.setTitle("Game");
+        this.addKeyListener(this);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
     }
@@ -43,20 +48,19 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
         gm = new GameManager(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        PhysicsObject pObject1 = new PhysicsObject(new Vector(0, 200), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
-        PhysicsObject pObject2 = new PhysicsObject(new Vector(0, -200), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
+        focusObj = new PhysicsObject(new Vector(0, 200), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
         GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 300, true);
-        gm.renderer.targetObject = pObject2;
-        gm.renderer.scale = 4;
+        
         gObject.mass = gObject.estimateMass();
-        pObject1.addForce(new Vector(200, 200), 1);
-        pObject2.addForce(new Vector(-200, -200), 1);
+        focusObj.addForce(new Vector(200, 200), 1);
         //#endregion
 
         
 
         startPhysicsUpdates(); //starts the physics updates 
     }
+
+
 
 
     public static void startPhysicsUpdates()
@@ -79,6 +83,27 @@ public class GameManager extends JFrame  //will manage the physics/gravity objec
             }
         };
         timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000)); //runs the method above at a constant rate 
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e)
+    {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e)
+    {
+        if (e.getKeyChar() == 'm')
+        {
+            
+        }
     }
 
 }
