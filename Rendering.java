@@ -53,15 +53,30 @@ public class Rendering extends JPanel implements ActionListener{
 
 	public void drawPhysicsObjects(Graphics2D g2D)
 	{
-		for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
-        {
-			g2D.setColor(new ColorUIResource(40, 40, 40));
-            g2D.fillOval(
-				(int)(GameManager.physicsObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3*a_scale), //x position of oval
-				(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6*a_scale), //y position of oval
-				(int)(6*a_scale), 	//width
-				(int)(12*a_scale) 	);	//height
-        }
+		if (targetObject== null)
+		{
+			for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
+			{
+				g2D.setColor(new ColorUIResource(40, 40, 40));
+				g2D.fillOval(
+					(int)(GameManager.physicsObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3), //x position of oval
+					(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6), //y position of oval
+					(int)(6), 	//width
+					(int)(12) 	);	//height
+			}
+		}
+		else
+		{
+			for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
+			{
+				g2D.setColor(new ColorUIResource(40, 40, 40));
+				g2D.fillOval(
+					(int)(GameManager.physicsObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3*a_scale), //x position of oval
+					(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6*a_scale), //y position of oval
+					(int)(6*a_scale), 	//width
+					(int)(12*a_scale) 	);	//height
+			}
+		}
 	}
 
 	public void drawGravityObjects(Graphics2D g2D)

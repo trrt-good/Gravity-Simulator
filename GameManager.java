@@ -32,11 +32,9 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        mainPhysObj = new PhysicsObject(new Vector(0, 600), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 100000.0, 300, false, true);
-        
-        gObject.mass = gObject.estimateMass();
-        mainPhysObj.addForce(new Vector(70, 0), 1);
+        mainPhysObj = new PhysicsObject(new Vector(0, 10000), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 3292381400.0, 12742, false, true);
+        mainPhysObj.addForce(new Vector(1000, 0), 1);
         mainPhysObj.addTorque(500, 1);
         //#endregion
 
@@ -81,7 +79,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         {
             case 1: if (renderer.targetObject == null && renderer.scaleMap < 3) {renderer.scaleMap += renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting < 100) {renderer.scaleWhileTargeting += renderer.scaleWhileTargeting/20;}
                 break;
-            case -1: if (renderer.targetObject == null && renderer.scaleMap > 0.05) {renderer.scaleMap -= renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting > 2.5) {renderer.scaleWhileTargeting -= renderer.scaleWhileTargeting/20;} 
+            case -1: if (renderer.targetObject == null && renderer.scaleMap > 0.001) {renderer.scaleMap -= renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting > 2.5) {renderer.scaleWhileTargeting -= renderer.scaleWhileTargeting/20;} 
                 break;
         }
     }
