@@ -99,6 +99,7 @@ public class PhysicsObject
 
     public void applyAngularDrag()
     {
+        if (drag == 0) return;
         if (angularVelocity !=0 )
         {
             angularVelocity = angularVelocity-0.5*surfaceAirDensity*angularVelocity*angularVelocity*angularDrag;
