@@ -2,22 +2,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.Color;
-public class GameManager extends JFrame implements KeyListener  //will manage the physics/gravity objects and preform physics updates 
+
+public class GameManager  //will manage the physics/gravity objects and preform physics updates 
 {
     public static final int FPS = 500; // FPS for the game
 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
-    private static GameManager gm;
+    public static final double FIXED_TIME_STEP = 0.005; // used by time based calculations 
+    public static double fixedDeltaTime = 0.005; //time between each physics update is called
 
-    public static final double FIXED_TIME_STEP = 0.02; // used by time based calculations 
-    public static double fixedDeltaTime = 0.002; //time between each physics update is called
-
-    private static PhysicsObject focusObj;
+    public static PhysicsObject mainObj;
+    public static Rendering renderer;
+    private static GameFrame gf;
 
     /* 
     DO NOT CHANGE FIXED_TIME_STEP ON IT'S OWN
@@ -28,43 +26,26 @@ public class GameManager extends JFrame implements KeyListener  //will manage th
     
     changing fixedDeltaTime alone will increase/decrease the speed of time
     */
-
-    private Rendering renderer; //the rendering class 
-
-    public GameManager() //constructor which sets up JFrame
-    {
-        renderer = new Rendering(FPS, 0.5, new Vector(0, 0), null, 4);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.add(renderer);
-		this.pack();
-        this.setTitle("Game");
-        this.addKeyListener(this);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
-    }
+    
 
     public static void main (String [] args)
     {
-        gm = new GameManager(); //constructs a game manager which creates the JFrame and starts the rendering process
+        gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        focusObj = new PhysicsObject(new Vector(0, 200), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 300, true);
+        mainObj = new PhysicsObject(new Vector(0, 400), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 10000.0, 300, false);
         
         gObject.mass = gObject.estimateMass();
-        focusObj.addForce(new Vector(200, 200), 1);
+        mainObj.addForce(new Vector(100, 0), 1);
         //#endregion
-
-        
 
         startPhysicsUpdates(); //starts the physics updates 
     }
 
-
-
-
     public static void startPhysicsUpdates()
     {
+
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() 
         { 
@@ -79,31 +60,40 @@ public class GameManager extends JFrame implements KeyListener  //will manage th
                     physicsObjects.get(i).updatePosition();
                     physicsObjects.get(i).updateRotation();
                     physicsObjects.get(i).checkCollisions();
+                    dragMap();
                 }
             }
         };
         timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000)); //runs the method above at a constant rate 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e)
+    public static void toggleMap()
     {
-
+        if (renderer.targetObject == null)
+            renderer.targetObject = mainObj;
+        else if (renderer.targetObject == mainObj)
+            renderer.targetObject = null;
     }
 
-    @Override
-    public void keyPressed(KeyEvent e)
+    public static void zoom(int inOut) 
     {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e)
-    {
-        if (e.getKeyChar() == 'm')
+        switch (inOut)
         {
-            
+            case 1: if (renderer.targetObject == null && renderer.scaleMap < 3) {renderer.scaleMap += renderer.scaleMap/10;} else if (renderer.scaleWhileTargeting < 50) {renderer.scaleWhileTargeting += renderer.scaleMap;}
+                break;
+            case -1: if (renderer.targetObject == null && renderer.scaleMap > 0.05) {renderer.scaleMap -= renderer.scaleMap/10;} else if (renderer.scaleWhileTargeting > 3) {renderer.scaleWhileTargeting -= renderer.scaleMap;} 
+                break;
         }
     }
 
+    public static void dragMap()
+    {
+        if (renderer.targetObject == null)
+        {
+            if (gf.mouseDown)
+            { //changes the render offset based off mouse position
+                renderer.fixedOffset = Vector.add(new Vector(-(gf.getMousePos().x/renderer.scaleMap - gf.getClickPos().x/renderer.scaleMap), -(gf.getMousePos().y/renderer.scaleMap - gf.getClickPos().y/renderer.scaleMap)), gf.getClickOffset());
+            }
+        }
+    }
 }
