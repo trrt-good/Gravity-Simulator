@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.Color;
 import java.awt.MouseInfo;
 public class GameFrame extends JFrame implements KeyListener, MouseListener
 {

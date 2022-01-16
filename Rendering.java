@@ -1,6 +1,9 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+
 import java.awt.event.*;
+import java.awt.Color;
 public class Rendering extends JPanel implements ActionListener{
 
 	final int PANEL_WIDTH = 1000; //width of the pannel 
@@ -38,25 +41,29 @@ public class Rendering extends JPanel implements ActionListener{
 		super.paint(g);
 		Graphics2D g2D = (Graphics2D) g;
 
-		RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON); //antialiasing (not sure if it works)
-		g2D.setRenderingHints(rh);
+		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON); //antialiasing (not sure if it works)
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT);
 
         for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
         {
-            g2D.drawOval(
+			g2D.setColor(new ColorUIResource(40, 40, 40));
+            g2D.fillOval(
 				(int)(GameManager.physicsObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3*a_scale), //x position of oval
-				(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -3*a_scale), //y position of oval
+				(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6*a_scale), //y position of oval
 				(int)(6*a_scale), 	//width
-				(int)(6*a_scale) 	);	//height
+				(int)(12*a_scale) 	);	//height
         }
 
         for (int i = 0; i < GameManager.gravityObjects.size(); i++) //draws all the gravity objects
         {
-            g2D.drawOval(
+			g2D.setColor(new ColorUIResource(64, 156, 255));
+            g2D.fillOval(
 				(int)(GameManager.gravityObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - GameManager.gravityObjects.get(i).diameter*a_scale/2 - a_offset.x*a_scale), //x position of oval
 				(int)(GameManager.gravityObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - GameManager.gravityObjects.get(i).diameter*a_scale/2 - a_offset.y*a_scale),  //y position of oval
 				(int)(GameManager.gravityObjects.get(i).diameter*a_scale), //width of oval
 				(int)(GameManager.gravityObjects.get(i).diameter*a_scale) 	); //height of oval 
+
         }
 	}
 	

@@ -10,8 +10,8 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
-    public static final double FIXED_TIME_STEP = 0.005; // used by time based calculations 
-    public static double fixedDeltaTime = 0.005; //time between each physics update is called
+    public static final double FIXED_TIME_STEP = 0.001; // used by time based calculations 
+    public static double fixedDeltaTime = 0.001; //time between each physics update is called
 
     public static PhysicsObject mainObj;
     public static Rendering renderer;
@@ -67,7 +67,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000)); //runs the method above at a constant rate 
     }
 
-    public static void toggleMap()
+    public static void toggleMap() //toggles between map view and focused view 
     {
         if (renderer.targetObject == null)
             renderer.targetObject = mainObj;
@@ -75,18 +75,18 @@ public class GameManager  //will manage the physics/gravity objects and preform 
             renderer.targetObject = null;
     }
 
-    public static void zoom(int inOut) 
+    public static void zoom(int inOut) //increases/drecreases the scale of the renderer 
     {
         switch (inOut)
         {
-            case 1: if (renderer.targetObject == null && renderer.scaleMap < 3) {renderer.scaleMap += renderer.scaleMap/10;} else if (renderer.scaleWhileTargeting < 50) {renderer.scaleWhileTargeting += renderer.scaleMap;}
+            case 1: if (renderer.targetObject == null && renderer.scaleMap < 3) {renderer.scaleMap += renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting < 100) {renderer.scaleWhileTargeting += renderer.scaleWhileTargeting/20;}
                 break;
-            case -1: if (renderer.targetObject == null && renderer.scaleMap > 0.05) {renderer.scaleMap -= renderer.scaleMap/10;} else if (renderer.scaleWhileTargeting > 3) {renderer.scaleWhileTargeting -= renderer.scaleMap;} 
+            case -1: if (renderer.targetObject == null && renderer.scaleMap > 0.05) {renderer.scaleMap -= renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting > 2.5) {renderer.scaleWhileTargeting -= renderer.scaleWhileTargeting/20;} 
                 break;
         }
     }
 
-    public static void dragMap()
+    public static void dragMap() //changes the position of the rendering object based off the position of the mouse, while it's dragging
     {
         if (renderer.targetObject == null)
         {
