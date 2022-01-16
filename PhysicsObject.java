@@ -130,6 +130,8 @@ public class PhysicsObject
     {
         if (freezeRotation == true) return;
         rotation = rotation + angularVelocity*GameManager.FIXED_TIME_STEP;
+        if (rotation > 360) rotation -= 360;
+        if (rotation < 0) rotation += 360;
     }
 
     public void checkCollisions()

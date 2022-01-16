@@ -9,7 +9,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
-    public static final double FIXED_TIME_STEP = 0.05; // used by time based calculations 
+    public static final double FIXED_TIME_STEP = 0.02; // used by time based calculations 
     public static double fixedDeltaTime = 0.001; //time between each physics update is called
 
     public static PhysicsObject mainPhysObj;
@@ -32,13 +32,12 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        mainPhysObj = new PhysicsObject(new Vector(0, 600), 10, 0.05, 0.01, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 100000.0, 300, false, false);
-        new GravityObject(new Vector(1000, 0), 100000.0, 300, false, false);
+        mainPhysObj = new PhysicsObject(new Vector(0, 600), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 100000.0, 300, false, true);
         
         gObject.mass = gObject.estimateMass();
-        mainPhysObj.addForce(new Vector(30, 0), 1);
-        mainPhysObj.addTorque(10, 1);
+        mainPhysObj.addForce(new Vector(70, 0), 1);
+        mainPhysObj.addTorque(500, 1);
         //#endregion
 
         startPhysicsUpdates(); //starts the physics updates 
