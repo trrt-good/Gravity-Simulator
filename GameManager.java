@@ -5,7 +5,6 @@ import java.util.TimerTask;
 
 public class GameManager  //will manage the physics/gravity objects and preform physics updates 
 {
-    public static final int FPS = 500; // FPS for the game
 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 

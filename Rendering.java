@@ -9,7 +9,7 @@ public class Rendering extends JPanel implements ActionListener{
 	final int PANEL_WIDTH = 1000; //width of the pannel 
 	final int PANEL_HEIGHT = 1000; //height of the pannel 
 
-	public int FPS = 1000;
+	public int FPS = 200;
 
 	public Vector fixedOffset; //offsets the position of objects that are rendered. (0,0) is centered
 

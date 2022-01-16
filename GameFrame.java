@@ -22,6 +22,7 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
 		this.setVisible(true);
 
     }
+    
 
     public Vector getMousePos()
     {
@@ -37,6 +38,8 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
     {
         return clickOffset;
     }
+
+//==================================== KEY INPUT =========================================
 
     @Override
     public void keyTyped(KeyEvent e)
@@ -64,11 +67,11 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
         
     }
 
-    //mouse methods
+//#region ===================== MOUSE INPUT ============================ 
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
+    public void mouseClicked(MouseEvent e) 
+    {
         
     }
 
@@ -84,19 +87,20 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
     public void mouseReleased(MouseEvent e) 
     {
         mouseDown = false;
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) 
+    {
         
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
+    public void mouseExited(MouseEvent e) 
+    {
         
     }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
+    //#endregion 
 
 }
