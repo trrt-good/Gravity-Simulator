@@ -139,20 +139,23 @@ public class PhysicsObject
         int i = 0;
         for (i = 0; i < GameManager.gravityObjects.size(); i++) //checks collisions against each gravity object
         {
-            //true if the distance between this object and the gravity object is less than the radius of gravity object
-            if (Vector.distance(position, GameManager.gravityObjects.get(i).position) <= GameManager.gravityObjects.get(i).diameter/2)
+            if (GameManager.gravityObjects.get(i).collisions)
             {
-                //freezes the object
-                velocity.x = 0;
-                velocity.y = 0;
-                effectedByGravity = false; 
-                freezeRotation = true;
-            } 
-            else
-            {
-                //un freezes
-                effectedByGravity = true;
-                freezeRotation = false;
+                //true if the distance between this object and the gravity object is less than the radius of gravity object
+                if (Vector.distance(position, GameManager.gravityObjects.get(i).position) <= GameManager.gravityObjects.get(i).diameter/2)
+                {
+                    //freezes the object
+                    velocity.x = 0;
+                    velocity.y = 0;
+                    effectedByGravity = false; 
+                    freezeRotation = true;
+                } 
+                else
+                {
+                    //un freezes
+                    effectedByGravity = true;
+                    freezeRotation = false;
+                }
             }
         }
     }

@@ -67,9 +67,13 @@ public class Rendering extends JPanel implements ActionListener{
 		g2D.setColor(new ColorUIResource(0, 0, 0));
 
 		g2D.drawString(String.format("zoom: %.2fx", a_scale), 20, 30);
-		g2D.drawString(String.format("speed: %.2f", GameManager.mainPhysObj.velocity.getMagnitude()) , 20, 50);
-		g2D.drawString("position: " + GameManager.mainPhysObj.velocity.toString(), 20, 70);
-		g2D.drawString("time scale: " + GameManager.FIXED_TIME_STEP/GameManager.fixedDeltaTime + "x", 20, 90);
+		g2D.drawString("time scale: " + GameManager.FIXED_TIME_STEP/GameManager.fixedDeltaTime + "x", 20, 50);
+
+		g2D.drawString(String.format("speed: %.2f", GameManager.mainPhysObj.velocity.getMagnitude()) , 20, 90);
+		g2D.drawString("position: " + GameManager.mainPhysObj.velocity.toString(), 20, 110);
+		
+		g2D.drawString(String.format("rotational velocity: %.2f", GameManager.mainPhysObj.angularVelocity), 20, 150);
+		g2D.drawString(String.format("rotation: %.2f", GameManager.mainPhysObj.rotation), 20, 170);
 	}
 	
 	@Override

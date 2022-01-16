@@ -22,7 +22,7 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
 		this.setVisible(true);
 
     }
-    
+
 
     public Vector getMousePos()
     {
