@@ -9,7 +9,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
-    public static final double FIXED_TIME_STEP = 0.02; // used by time based calculations 
+    public static final double FIXED_TIME_STEP = 0.001; // used by time based calculations 
     public static double fixedDeltaTime = 0.001; //time between each physics update is called
 
     public static PhysicsObject mainPhysObj;

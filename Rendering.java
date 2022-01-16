@@ -45,7 +45,15 @@ public class Rendering extends JPanel implements ActionListener{
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_DEFAULT);
 
-        for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
+        drawPhysicsObjects(g2D);
+		drawGravityObjects(g2D);
+    
+		drawStats(g2D);
+	}
+
+	public void drawPhysicsObjects(Graphics2D g2D)
+	{
+		for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
         {
 			g2D.setColor(new ColorUIResource(40, 40, 40));
             g2D.fillOval(
@@ -54,8 +62,11 @@ public class Rendering extends JPanel implements ActionListener{
 				(int)(6*a_scale), 	//width
 				(int)(12*a_scale) 	);	//height
         }
+	}
 
-        for (int i = 0; i < GameManager.gravityObjects.size(); i++) //draws all the gravity objects
+	public void drawGravityObjects(Graphics2D g2D)
+	{
+		for (int i = 0; i < GameManager.gravityObjects.size(); i++) //draws all the gravity objects
         {
 			g2D.setColor(new ColorUIResource(64, 156, 255));
             g2D.fillOval(
@@ -64,6 +75,10 @@ public class Rendering extends JPanel implements ActionListener{
 				(int)(GameManager.gravityObjects.get(i).diameter*a_scale), //width of oval
 				(int)(GameManager.gravityObjects.get(i).diameter*a_scale) 	); //height of oval 
         }
+	}
+
+	public void drawStats(Graphics2D g2D)
+	{
 		g2D.setColor(new ColorUIResource(0, 0, 0));
 
 		g2D.drawString(String.format("zoom: %.2fx", a_scale), 20, 30);
