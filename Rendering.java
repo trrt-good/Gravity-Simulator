@@ -63,8 +63,13 @@ public class Rendering extends JPanel implements ActionListener{
 				(int)(GameManager.gravityObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - GameManager.gravityObjects.get(i).diameter*a_scale/2 - a_offset.y*a_scale),  //y position of oval
 				(int)(GameManager.gravityObjects.get(i).diameter*a_scale), //width of oval
 				(int)(GameManager.gravityObjects.get(i).diameter*a_scale) 	); //height of oval 
-
         }
+		g2D.setColor(new ColorUIResource(0, 0, 0));
+
+		g2D.drawString(String.format("zoom: %.2fx", a_scale), 20, 30);
+		g2D.drawString(String.format("speed: %.2f", GameManager.mainPhysObj.velocity.getMagnitude()) , 20, 50);
+		g2D.drawString("position: " + GameManager.mainPhysObj.velocity.toString(), 20, 70);
+		g2D.drawString("time scale: " + GameManager.FIXED_TIME_STEP/GameManager.fixedDeltaTime + "x", 20, 90);
 	}
 	
 	@Override
