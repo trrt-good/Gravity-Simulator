@@ -4,6 +4,10 @@ import javax.swing.plaf.ColorUIResource;
 
 import java.awt.event.*;
 import java.awt.Color;
+import java.awt.Image.*;
+import javax.imageio.*;
+import java.io.File;
+import java.io.IOException;
 public class Rendering extends JPanel implements ActionListener{
 
 	final int PANEL_WIDTH = 1000; //width of the pannel 
@@ -55,26 +59,41 @@ public class Rendering extends JPanel implements ActionListener{
 	{
 		if (targetObject== null)
 		{
-			for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
+			for (int i = 0; i < GameManager.rockets.size(); i++) //draws all the physics objects
 			{
 				g2D.setColor(new ColorUIResource(40, 40, 40));
-				g2D.fillOval(
-					(int)(GameManager.physicsObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3), //x position of oval
-					(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6), //y position of oval
-					(int)(6), 	//width
-					(int)(12) 	);	//height
+				try 
+				{
+					g2D.drawImage(ImageIO.read(new File("Images", "Arrow.png")), 
+					(int)(GameManager.rockets.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -9), 
+					(int)(GameManager.rockets.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -12), 18, 24, null);
+				} 
+				catch (IOException e) 
+				{
+					System.out.println("exception");
+				}
+				// g2D.fillOval(
+				// 	(int)(GameManager.rockets.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3), //x position of oval
+				// 	(int)(GameManager.rockets.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6), //y position of oval
+				// 	(int)(6), 	//width
+				// 	(int)(12) 	);	//height
 			}
 		}
 		else
 		{
-			for (int i = 0; i < GameManager.physicsObjects.size(); i++) //draws all the physics objects
+			for (int i = 0; i < GameManager.rockets.size(); i++) //draws all the physics objects
 			{
 				g2D.setColor(new ColorUIResource(40, 40, 40));
-				g2D.fillOval(
-					(int)(GameManager.physicsObjects.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3*a_scale), //x position of oval
-					(int)(GameManager.physicsObjects.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6*a_scale), //y position of oval
-					(int)(6*a_scale), 	//width
-					(int)(12*a_scale) 	);	//height
+				try 
+				{
+					g2D.drawImage(ImageIO.read(new File("Images", "Rocket.png")), 
+					(int)(GameManager.rockets.get(i).position.x*a_scale + PANEL_WIDTH/2 - a_offset.x*a_scale -3*a_scale), 
+					(int)(GameManager.rockets.get(i).position.y*a_scale + PANEL_HEIGHT/2 - a_offset.y*a_scale -6*a_scale), (int)(6*a_scale), (int)(12*a_scale), null);
+				} 
+				catch (IOException e) 
+				{
+					System.out.println("error with file \"Rocket.png\"");
+				}
 			}
 		}
 	}
@@ -99,11 +118,11 @@ public class Rendering extends JPanel implements ActionListener{
 		g2D.drawString(String.format("zoom: %.2fx", a_scale), 20, 30);
 		g2D.drawString("time scale: " + GameManager.FIXED_TIME_STEP/GameManager.fixedDeltaTime + "x", 20, 50);
 
-		g2D.drawString(String.format("speed: %.2f", GameManager.mainPhysObj.velocity.getMagnitude()) , 20, 90);
-		g2D.drawString("position: " + GameManager.mainPhysObj.velocity.toString(), 20, 110);
+		g2D.drawString(String.format("speed: %.2f", GameManager.mainObject.velocity.getMagnitude()) , 20, 90);
+		g2D.drawString("position: " + GameManager.mainObject.velocity.toString(), 20, 110);
 		
-		g2D.drawString(String.format("rotational velocity: %.2f", GameManager.mainPhysObj.angularVelocity), 20, 150);
-		g2D.drawString(String.format("rotation: %.2f", GameManager.mainPhysObj.rotation), 20, 170);
+		g2D.drawString(String.format("rotational velocity: %.2f", GameManager.mainObject.angularVelocity), 20, 150);
+		g2D.drawString(String.format("rotation: %.2f", GameManager.mainObject.rotation), 20, 170);
 	}
 	
 	@Override

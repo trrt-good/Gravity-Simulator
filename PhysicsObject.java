@@ -26,7 +26,7 @@ public class PhysicsObject
     //constructor 
     public PhysicsObject(Vector posIn, double massIn, double angDragIn, double dragIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, Vector centOfMassIn)
     {
-        GameManager.physicsObjects.add(this); //adds this object to the list of physics objects in the game manager class when it is constructed
+        //adds this object to the list of physics objects in the game manager class when it is constructed
         position = new Vector(posIn);
         mass = massIn;
         drag = dragIn;

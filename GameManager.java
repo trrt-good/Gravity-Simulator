@@ -7,12 +7,12 @@ public class GameManager  //will manage the physics/gravity objects and preform 
 {
 
     public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
-    public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
+    public static List<Rocket> rockets = new ArrayList<Rocket>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
     public static final double FIXED_TIME_STEP = 0.001; // used by time based calculations 
     public static double fixedDeltaTime = 0.001; //time between each physics update is called
 
-    public static PhysicsObject mainPhysObj;
+    public static Rocket mainObject;
     public static Rendering renderer;
     private static GameFrame gf;
 
@@ -32,10 +32,10 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        mainPhysObj = new PhysicsObject(new Vector(0, 100), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
-        new GravityObject(new Vector(0, 0), 1000000.0, 150, false, true);
-        mainPhysObj.addForce(new Vector(1000, 0), 1);
-        mainPhysObj.addTorque(500, 1);
+        mainObject = new Rocket(new Vector(200, 200));
+        new GravityObject(new Vector(0, 0), 1000000.0, 200, true, true);
+        mainObject.addForce(new Vector(10000, 0), 1);
+        mainObject.addTorque(500, 1);
         //#endregion
 
         startPhysicsUpdates(); //starts the physics updates 
@@ -50,14 +50,14 @@ public class GameManager  //will manage the physics/gravity objects and preform 
             public void run() 
             {
                 int i = 0;
-                for (i = 0; i < physicsObjects.size(); i++) //runs physics update methods for each physicsObject
+                for (i = 0; i < rockets.size(); i++) //runs physics update methods for each physicsObject
                 {
-                    physicsObjects.get(i).applyDrag();
-                    physicsObjects.get(i).applyAngularDrag();
-                    physicsObjects.get(i).applyGravity();
-                    physicsObjects.get(i).updatePosition();
-                    physicsObjects.get(i).updateRotation();
-                    physicsObjects.get(i).checkCollisions();
+                    rockets.get(i).applyDrag();
+                    rockets.get(i).applyAngularDrag();
+                    rockets.get(i).applyGravity();
+                    rockets.get(i).updatePosition();
+                    rockets.get(i).updateRotation();
+                    rockets.get(i).checkCollisions();
                     dragMap();
                 }
             }
@@ -68,8 +68,8 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static void toggleMap() //toggles between map view and focused view 
     {
         if (renderer.targetObject == null)
-            renderer.targetObject = mainPhysObj;
-        else if (renderer.targetObject == mainPhysObj)
+            renderer.targetObject = mainObject;
+        else if (renderer.targetObject == mainObject)
             renderer.targetObject = null;
     }
 

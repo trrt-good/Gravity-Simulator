@@ -1,25 +1,31 @@
-import javax.swing.ImageIcon;
+import java.awt.Image.*;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class Rocket extends PhysicsObject
 {
     public Engine engine;
     public Body body;
-    public ImageIcon rocketImage = new ImageIcon("Images/Rocket.png");
 
-    public Rocket()
+    public Rocket(Vector position)
     {
         super();
+        
+        GameManager.rockets.add(this); 
         engine = Engine.ENGINE_LARGE;
         body = new Body(100, Body.ENERGY_DENSITY_HIGH);
         super.mass = body.fuelMass*1.1 + engine.engineMass;
+        super.position = position;
     }
 
-    public Rocket(Body bodyIn, Engine engineIn)
+    public Rocket(Vector position, Body bodyIn, Engine engineIn)
     {
         super();
         body = bodyIn;
         engine = engineIn;
         super.mass = body.fuelMass*1.1 + engine.engineMass;
+        super.position = position;
     }
 
     public static class Engine
