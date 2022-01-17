@@ -1,4 +1,3 @@
-import javax.swing.ImageIcon;
 public class PhysicsObject
 {
     private double surfaceAirDensity = 1.225; //air density at the surface of a gravity object

@@ -33,7 +33,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
 
         //#region DEBUG
         mainPhysObj = new PhysicsObject(new Vector(0, 100), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 1000000.0, 150, false, true);
+        new GravityObject(new Vector(0, 0), 1000000.0, 150, false, true);
         mainPhysObj.addForce(new Vector(1000, 0), 1);
         mainPhysObj.addTorque(500, 1);
         //#endregion
