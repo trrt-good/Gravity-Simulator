@@ -32,8 +32,8 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        mainPhysObj = new PhysicsObject(new Vector(0, 10000), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 3292381400.0, 12742, false, true);
+        mainPhysObj = new PhysicsObject(new Vector(0, 100), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
+        GravityObject gObject = new GravityObject(new Vector(0, 0), 1000000.0, 150, false, true);
         mainPhysObj.addForce(new Vector(1000, 0), 1);
         mainPhysObj.addTorque(500, 1);
         //#endregion
