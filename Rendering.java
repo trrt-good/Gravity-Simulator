@@ -4,7 +4,6 @@ import javax.swing.plaf.ColorUIResource;
 
 import java.awt.event.*;
 import java.awt.Color;
-import java.awt.Image.*;
 import javax.imageio.*;
 import java.io.File;
 import java.io.IOException;
