@@ -32,9 +32,9 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
 
         //#region DEBUG
-        mainObject = new Rocket(new Vector(200, 200));
-        new GravityObject(new Vector(0, 0), 1000000.0, 200, true, true);
-        mainObject.addForce(new Vector(10000, 0), 1);
+        mainObject = new Rocket(new Vector2(200, 200));
+        new GravityObject(new Vector2(0, 0), 1000000.0, 200, true, true);
+        mainObject.addForce(new Vector2(10000, 0), 1);
         mainObject.addTorque(500, 1);
         //#endregion
 
@@ -90,7 +90,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         {
             if (gf.mouseDown)
             { //changes the render offset based off mouse position
-                renderer.fixedOffset = Vector.add(new Vector(-(gf.getMousePos().x/renderer.scaleMap - gf.getClickPos().x/renderer.scaleMap), -(gf.getMousePos().y/renderer.scaleMap - gf.getClickPos().y/renderer.scaleMap)), gf.getClickOffset());
+                renderer.fixedOffset = Vector2.add(new Vector2(-(gf.getMousePos().x/renderer.scaleMap - gf.getClickPos().x/renderer.scaleMap), -(gf.getMousePos().y/renderer.scaleMap - gf.getClickPos().y/renderer.scaleMap)), gf.getClickOffset());
             }
         }
     }

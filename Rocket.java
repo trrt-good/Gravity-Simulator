@@ -3,7 +3,7 @@ public class Rocket extends PhysicsObject
     public Engine engine;
     public Body body;
 
-    public Rocket(Vector position)
+    public Rocket(Vector2 position)
     {
         super();
         
@@ -14,7 +14,7 @@ public class Rocket extends PhysicsObject
         super.position = position;
     }
 
-    public Rocket(Vector position, Body bodyIn, Engine engineIn)
+    public Rocket(Vector2 position, Body bodyIn, Engine engineIn)
     {
         super();
         body = bodyIn;

@@ -14,7 +14,7 @@ public class Rendering extends JPanel implements ActionListener{
 
 	public int FPS = 200;
 
-	public Vector fixedOffset; //offsets the position of objects that are rendered. (0,0) is centered
+	public Vector2 fixedOffset; //offsets the position of objects that are rendered. (0,0) is centered
 
 	public PhysicsObject targetObject; //the renderer will focus on this object 
 
@@ -22,10 +22,10 @@ public class Rendering extends JPanel implements ActionListener{
     public double scaleMap; //the scale when in map mode
 
 	private double a_scale = scaleMap; //the actual offset that effects the renderer 
-	private Vector a_offset = fixedOffset; //the actual scale that effects the renderer 
+	private Vector2 a_offset = fixedOffset; //the actual scale that effects the renderer 
 	private Timer timer; //timer class for timing fps 
 
-	public Rendering(double scaleIn, Vector offsetIn, PhysicsObject focusObjectIn, double targetScaleIn) //constructor which sets up the timer 
+	public Rendering(double scaleIn, Vector2 offsetIn, PhysicsObject focusObjectIn, double targetScaleIn) //constructor which sets up the timer 
     {
 		this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT));
 		this.setBackground(Color.white);
@@ -33,7 +33,7 @@ public class Rendering extends JPanel implements ActionListener{
 		a_scale = scaleMap;
 		scaleWhileTargeting = targetScaleIn;
 		timer = new Timer(1000/FPS + 1, this);
-		fixedOffset = new Vector(offsetIn);
+		fixedOffset = new Vector2(offsetIn);
 		a_offset = fixedOffset;
 		targetObject = focusObjectIn;
 		timer.start(); //starts the timer to repaint the panel every n milliseconds

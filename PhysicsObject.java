@@ -2,19 +2,19 @@ public class PhysicsObject
 {
     private double surfaceAirDensity = 1.225; //air density at the surface of a gravity object
 
-    public Vector position = new Vector(0, 0); //global position of the PhysicsObject as a vector 
-    public Vector prevPosition = new Vector(0, 0); //position before the last physics update
+    public Vector2 position = new Vector2(0, 0); //global position of the PhysicsObject as a vector 
+    public Vector2 prevPosition = new Vector2(0, 0); //position before the last physics update
     //local position is always 0,0
     public double rotation = 0.0; //rotation of the PhysicsObject in degrees
 
     public double mass = 10; //Mass of the PhysicsObject 
-    public Vector centerOfMass = new Vector(0, 0); //The center of mass of the PhysicsObject in local space
+    public Vector2 centerOfMass = new Vector2(0, 0); //The center of mass of the PhysicsObject in local space
 
     public double drag = 0.01; //Coefficient of drag
     public double angularDrag = 0.05; //Coefficient of angular drag
 
     public double angularVelocity = 0; //angular velocity in degrees per second 
-    public Vector velocity = new Vector(0, 0); //Linear velocity of the PhysicsObject in units/sec
+    public Vector2 velocity = new Vector2(0, 0); //Linear velocity of the PhysicsObject in units/sec
 
     public boolean isKinematic = false; //should this PhysicsObject be taken out of physics control?
     public boolean freezeRotation = false; //freezes rotation if true 
@@ -24,25 +24,25 @@ public class PhysicsObject
     public PhysicsObject(){}
 
     //constructor 
-    public PhysicsObject(Vector posIn, double massIn, double angDragIn, double dragIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, Vector centOfMassIn)
+    public PhysicsObject(Vector2 posIn, double massIn, double angDragIn, double dragIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, Vector2 centOfMassIn)
     {
         //adds this object to the list of physics objects in the game manager class when it is constructed
-        position = new Vector(posIn);
+        position = new Vector2(posIn);
         mass = massIn;
         drag = dragIn;
         angularDrag = angDragIn;
         isKinematic = isKnemtcIn;
         freezeRotation = frzRotationIn;
         effectedByGravity = effbyGravIn;
-        centerOfMass = new Vector(centOfMassIn);
+        centerOfMass = new Vector2(centOfMassIn);
     }
 
-    public Vector getWorldCenterOfMass() //The center of mass of the PhysicsObject in global space
+    public Vector2 getWorldCenterOfMass() //The center of mass of the PhysicsObject in global space
     {
-        return new Vector(position.x + centerOfMass.x, position.y + centerOfMass.y);
+        return new Vector2(position.x + centerOfMass.x, position.y + centerOfMass.y);
     }
 
-    public void addForce(Vector forceIn, int forceType) //forceType 0 is force over time, forceType 1 is instant force applied
+    public void addForce(Vector2 forceIn, int forceType) //forceType 0 is force over time, forceType 1 is instant force applied
     {
         if (isKinematic == true) return;
         if (forceType == 0)
@@ -86,9 +86,9 @@ public class PhysicsObject
             if (GameManager.gravityObjects.get(i).hasAtmosphere == true)
             {
                 double surfaceGForce = (GameManager.gravityObjects.get(i).mass*mass)/Math.pow(GameManager.gravityObjects.get(i).diameter/2, 2);
-                if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
+                if (velocity.getMagnitude() != 0 && ((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector2.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)/surfaceGForce) > 0.2)
                 {
-                    double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(),GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
+                    double multiplier = (velocity.getMagnitude()-(0.5*(surfaceAirDensity*((GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector2.distance(getWorldCenterOfMass(),GameManager.gravityObjects.get(i).position), 2)/(surfaceGForce)))*velocity.getSqrMagnitude())*drag*GameManager.FIXED_TIME_STEP)/velocity.getMagnitude();
                     velocity.x *= multiplier;
                     velocity.y *= multiplier;
                 }
@@ -112,10 +112,10 @@ public class PhysicsObject
         for (i = 0; i < GameManager.gravityObjects.size(); i++) //applies gravity for each gravity object
         {
             addForce( //adds force to this object based off the vector 
-                Vector.scaledDifference( //returns a vector that's x and y fields are the difference between two specified positions, then scaled proportionally to the specified magnitude 
+                Vector2.scaledDifference( //returns a vector that's x and y fields are the difference between two specified positions, then scaled proportionally to the specified magnitude 
                     getWorldCenterOfMass(), //position of this object's center of mass
                     GameManager.gravityObjects.get(i).position, //position of the gravity object
-                    -(GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)), 0); 
+                    -(GameManager.gravityObjects.get(i).mass*mass)/Math.pow(Vector2.distance(getWorldCenterOfMass(), GameManager.gravityObjects.get(i).position), 2)), 0); 
                     //^ the magnitude of the force of gravity, calculated by the formula (m1*m2)/d^2   
         }
         
@@ -124,7 +124,7 @@ public class PhysicsObject
     public void updatePosition() //changes the position of the opject based off velocity 
     {
         prevPosition = position; //sets the prevposition field before it does calculations 
-        position = Vector.add(position, Vector.multiply(velocity, GameManager.FIXED_TIME_STEP)); 
+        position = Vector2.add(position, Vector2.multiply(velocity, GameManager.FIXED_TIME_STEP)); 
     }
 
     public void updateRotation() //changes the rotation based off velocity 
@@ -143,7 +143,7 @@ public class PhysicsObject
             if (GameManager.gravityObjects.get(i).collisions)
             {
                 //true if the distance between this object and the gravity object is less than the radius of gravity object
-                if (Vector.distance(position, GameManager.gravityObjects.get(i).position) <= GameManager.gravityObjects.get(i).diameter/2)
+                if (Vector2.distance(position, GameManager.gravityObjects.get(i).position) <= GameManager.gravityObjects.get(i).diameter/2)
                 {
                     //freezes the object
                     velocity.x = 0;

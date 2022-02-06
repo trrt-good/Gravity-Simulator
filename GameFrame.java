@@ -5,12 +5,12 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
 {
     public Rendering renderer;
     public boolean mouseDown; //true while mouse button is down
-    private Vector clickPos; //the position of the mouse on the window when clicked
-    private Vector clickOffset; //the render offset when clicked
+    private Vector2 clickPos; //the position of the mouse on the window when clicked
+    private Vector2 clickOffset; //the render offset when clicked
 
     public GameFrame() //constructor which sets up JFrame
     {
-        renderer = new Rendering(0.5, new Vector(0, 0), null, 4);
+        renderer = new Rendering(0.5, new Vector2(0, 0), null, 4);
         GameManager.renderer = renderer;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.add(renderer);
@@ -24,17 +24,17 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
     }
 
 
-    public Vector getMousePos()
+    public Vector2 getMousePos()
     {
-        return new Vector(MouseInfo.getPointerInfo().getLocation().getX() - this.getLocationOnScreen().x -7, MouseInfo.getPointerInfo().getLocation().getY() - this.getLocationOnScreen().y -30);
+        return new Vector2(MouseInfo.getPointerInfo().getLocation().getX() - this.getLocationOnScreen().x -7, MouseInfo.getPointerInfo().getLocation().getY() - this.getLocationOnScreen().y -30);
     }
 
-    public Vector getClickPos()
+    public Vector2 getClickPos()
     {
         return clickPos;
     }
 
-    public Vector getClickOffset()
+    public Vector2 getClickOffset()
     {
         return clickOffset;
     }
@@ -80,7 +80,7 @@ public class GameFrame extends JFrame implements KeyListener, MouseListener
     {
         mouseDown = true;
         clickPos = getMousePos();
-        clickOffset = new Vector(renderer.fixedOffset);
+        clickOffset = new Vector2(renderer.fixedOffset);
     }
 
     @Override

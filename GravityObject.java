@@ -1,6 +1,6 @@
 public class GravityObject 
 {
-    public Vector position; //position of the object
+    public Vector2 position; //position of the object
     public double mass; //mass of the object (in metric tons)
 
     public boolean hasAtmosphere; //false if this object has no atmosphere
@@ -8,7 +8,7 @@ public class GravityObject
     public int diameter; 
     public boolean collisions;
 
-    public GravityObject(Vector posIn, double massIn, int diameterIn, boolean hasAtmosphereIn, boolean collisionsIn) //constructor
+    public GravityObject(Vector2 posIn, double massIn, int diameterIn, boolean hasAtmosphereIn, boolean collisionsIn) //constructor
     {
         GameManager.gravityObjects.add(this);
         position = posIn;
