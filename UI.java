@@ -6,7 +6,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 {
 	private final int FPS = 500;
 
-	private Color backgroundColor = new Color(0, 0, 0);
+	private Color backgroundColor = new Color(255, 255, 255);
 	private int scale = 1;
 	private Point offsetPoint;
 
@@ -28,7 +28,10 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-
+        for (int i =0; i < GameManager.physicsObjects.size(); i++)
+        {
+            drawPhysicsObject(g, GameManager.physicsObjects.get(i));
+        }
 	}
 
 	public void drawPhysicsObject(Graphics g, PhysicsObject physicsObject)

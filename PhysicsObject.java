@@ -9,7 +9,6 @@ public class PhysicsObject
     //local position is always 0,0
 
     public double mass = 10; //Mass of the PhysicsObject 
-    
 
     public double drag = 0.01; //Coefficient of drag
 
