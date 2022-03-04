@@ -1,99 +1,63 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.*;
+import java.awt.event.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class GameManager  //will manage the physics/gravity objects and preform physics updates 
 {
-
-    public static List<GravityObject> gravityObjects = new ArrayList<GravityObject>(); //list containing all gravity objects, new gravity objects are automatically added to the list.
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
-    public static final double FIXED_TIME_STEP = 0.001; // used by time based calculations 
-    public static double fixedDeltaTime = 0.001; //time between each physics update is called
+    public static final int PHYSICS_TICK_SPEED = 200;
+    public static final int TIME_SCALE = 1;
 
-    public static PhysicsObject mainPhysObj;
-    public static Rendering renderer;
-    private static GameFrame gf;
+    public static PhysicsObject mainObject;
+    public static JFrame simulationFrame;
+    public static JPanel uiPanel = new UI();
+    public static InputManager inputManager;
 
-    /* 
-    DO NOT CHANGE FIXED_TIME_STEP ON IT'S OWN
 
-    keep FIXED_TIME_STEP and fixedDeltaTime equal for real-time. 
-    They can be increased for less physics accuracy but reduced load on the CPU, 
-    or decreased for higher physics accuracy but increase CPU load
+    public static Timer physicsTickTimer = new Timer((int)(1000.0/PHYSICS_TICK_SPEED/(double)TIME_SCALE), new ActionListener()
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            for (int i = 0; i < physicsObjects.size(); i++)
+            {
+                physicsObjects.get(i).applyDrag();
+                physicsObjects.get(i).applyGravity();
+                physicsObjects.get(i).updatePosition();
+            }
+        }
+    });
     
-    changing fixedDeltaTime alone will increase/decrease the speed of time
-    */
-    
-
     public static void main (String [] args)
     {
-        gf = new GameFrame(); //constructs a game manager which creates the JFrame and starts the rendering process
-
+        createJFrame();
         //#region DEBUG
-        mainPhysObj = new PhysicsObject(new Vector(0, 600), 10, 0.01, 0.01, false, false, true, new Vector(0,0));
-        GravityObject gObject = new GravityObject(new Vector(0, 0), 100000.0, 300, false, true);
-        
-        gObject.mass = gObject.estimateMass();
-        mainPhysObj.addForce(new Vector(70, 0), 1);
-        mainPhysObj.addTorque(500, 1);
+        mainObject = new PhysicsObject(new Vector2(200, 200), 10);
+        mainObject.addForce(new Vector2(20000, 5000), 1);
         //#endregion
 
-        startPhysicsUpdates(); //starts the physics updates 
+        physicsTickTimer.start(); //starts the physics updates 
     }
 
-    public static void startPhysicsUpdates()
+    public static void createJFrame()
     {
-
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() 
-        { 
-            public void run() 
-            {
-                int i = 0;
-                for (i = 0; i < physicsObjects.size(); i++) //runs physics update methods for each physicsObject
-                {
-                    physicsObjects.get(i).applyDrag();
-                    physicsObjects.get(i).applyAngularDrag();
-                    physicsObjects.get(i).applyGravity();
-                    physicsObjects.get(i).updatePosition();
-                    physicsObjects.get(i).updateRotation();
-                    physicsObjects.get(i).checkCollisions();
-                    dragMap();
-                }
-            }
-        };
-        timer.scheduleAtFixedRate(timerTask, (long)1, (long)(fixedDeltaTime*1000)); //runs the method above at a constant rate 
+        simulationFrame = new JFrame();
+        simulationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		simulationFrame.add(uiPanel);
+        simulationFrame.setTitle("Physics Simulation");
+        simulationFrame.addKeyListener(inputManager);
+        simulationFrame.addMouseListener(inputManager);
+		simulationFrame.setLocationRelativeTo(null);
+		simulationFrame.setVisible(true);
     }
-
-    public static void toggleMap() //toggles between map view and focused view 
+    
+    public static double getDeltaTime()
     {
-        if (renderer.targetObject == null)
-            renderer.targetObject = mainPhysObj;
-        else if (renderer.targetObject == mainPhysObj)
-            renderer.targetObject = null;
-    }
-
-    public static void zoom(int inOut) //increases/drecreases the scale of the renderer 
-    {
-        switch (inOut)
-        {
-            case 1: if (renderer.targetObject == null && renderer.scaleMap < 3) {renderer.scaleMap += renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting < 100) {renderer.scaleWhileTargeting += renderer.scaleWhileTargeting/20;}
-                break;
-            case -1: if (renderer.targetObject == null && renderer.scaleMap > 0.05) {renderer.scaleMap -= renderer.scaleMap/15;} else if (renderer.scaleWhileTargeting > 2.5) {renderer.scaleWhileTargeting -= renderer.scaleWhileTargeting/20;} 
-                break;
-        }
-    }
-
-    public static void dragMap() //changes the position of the rendering object based off the position of the mouse, while it's dragging
-    {
-        if (renderer.targetObject == null)
-        {
-            if (gf.mouseDown)
-            { //changes the render offset based off mouse position
-                renderer.fixedOffset = Vector.add(new Vector(-(gf.getMousePos().x/renderer.scaleMap - gf.getClickPos().x/renderer.scaleMap), -(gf.getMousePos().y/renderer.scaleMap - gf.getClickPos().y/renderer.scaleMap)), gf.getClickOffset());
-            }
-        }
+        return 1/(double)PHYSICS_TICK_SPEED;
     }
 }
+
