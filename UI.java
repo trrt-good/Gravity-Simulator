@@ -8,7 +8,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 
 	private Color backgroundColor = new Color(255, 255, 255);
 	private int scale = 1;
-	private Point offsetPoint;
+	private Point offsetPoint = new Point(0, 0);
 
 	private Timer uiTimer = new Timer(1000/FPS + 1, new ActionListener()
 	{
@@ -37,12 +37,20 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 	public void drawPhysicsObject(Graphics g, PhysicsObject physicsObject)
 	{
 		g.setColor(physicsObject.color);
-		
+        Point screenCoords = toScreenCoords(physicsObject.position);
+		g.fillOval(screenCoords.x, screenCoords.y, (int)physicsObject.diameter, (int)physicsObject.diameter);
 	}
 
 	public Point toScreenCoords(Vector2 worldCoords)
 	{
-		return new Point((int)(worldCoords.x*scale + getWidth()*2 - offsetPoint.x), (int)(getHeight()*2 - worldCoords.y*scale - offsetPoint.y));
+        Point screenPoint = new Point((int)(worldCoords.x*scale + getWidth()*2 - offsetPoint.x), (int)(getHeight()*2 - worldCoords.y*scale - offsetPoint.y));
+        System.out.println("World: " + worldCoords.toString() + "\nScreen: " + screenPoint.toString());
+		return screenPoint;
+    }
+
+    public Point toScreenCoords(Vector2 worldCoords, int diameter)
+	{
+		return new Point((int)(worldCoords.x*scale + getWidth()*2 - offsetPoint.x) - diameter/2, (int)(getHeight()*2 - worldCoords.y*scale - offsetPoint.y) - diameter/2);
 	}
 
     @Override

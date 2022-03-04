@@ -36,8 +36,8 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     {
         createJFrame();
         //#region DEBUG
-        mainObject = new PhysicsObject(new Vector2(200, 200), 10);
-        mainObject.addForce(new Vector2(20000, 5000), 1);
+        mainObject = new PhysicsObject(new Vector2(0, 0), 10);
+        mainObject.addForce(new Vector2(10, 0), 1);
         //#endregion
 
         physicsTickTimer.start(); //starts the physics updates 
