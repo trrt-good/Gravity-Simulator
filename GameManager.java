@@ -37,7 +37,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         createJFrame();
         //#region DEBUG
         mainObject = new PhysicsObject(new Vector2(0, 0), 10);
-        mainObject.addForce(new Vector2(10, 0), 1);
+        mainObject.addForce(new Vector2(100, 0), 1);
         //#endregion
 
         physicsTickTimer.start(); //starts the physics updates 
@@ -47,12 +47,11 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     {
         simulationFrame = new JFrame();
         simulationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		simulationFrame.add(uiPanel);
-        simulationFrame.setTitle("Physics Simulation");
         simulationFrame.setSize(1920, 1080);
+		simulationFrame.getContentPane().add(uiPanel);
+        simulationFrame.setTitle("Physics Simulation");
         simulationFrame.addKeyListener(inputManager);
         simulationFrame.addMouseListener(inputManager);
-		simulationFrame.setLocationRelativeTo(null);
 		simulationFrame.setVisible(true);
     }
     

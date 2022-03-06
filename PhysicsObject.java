@@ -78,7 +78,7 @@ public class PhysicsObject
         int i = 0;
         for (i = 0; i < GameManager.physicsObjects.size(); i++) //applies gravity for each gravity object
         {
-            if (GameManager.physicsObjects.get(i).gravitational)
+            if (GameManager.physicsObjects.get(i).gravitational && GameManager.physicsObjects.get(i) != this)
             {
                 addForce( //adds force to this object based off the vector 
                 Vector2.scaledDifference( //returns a vector that's angle is equal to the one inputed, then scaled proportionally to the specified magnitude 
@@ -93,6 +93,7 @@ public class PhysicsObject
     public void updatePosition() //changes the position of the opject based off velocity 
     {
         position = Vector2.add(position, Vector2.multiply(velocity, GameManager.getDeltaTime())); 
+        System.out.println(position.y);
     }
 
     public void checkCollisions()
@@ -100,7 +101,7 @@ public class PhysicsObject
         int i = 0;
         for (i = 0; i < GameManager.physicsObjects.size(); i++) //checks collisions against each gravity object
         {
-            if (GameManager.physicsObjects.get(i).collisions)
+            if (GameManager.physicsObjects.get(i).collisions && GameManager.physicsObjects.get(i) != this)
             {
                 //true if the distance between this object and the gravity object is less than the radius of gravity object
                 if (Vector2.distance(position, GameManager.physicsObjects.get(i).position) <= GameManager.physicsObjects.get(i).diameter/2)
