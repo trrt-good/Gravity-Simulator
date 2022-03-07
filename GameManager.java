@@ -10,7 +10,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
     public static final int PHYSICS_TICK_SPEED = 200;
-    public static final int TIME_SCALE = 1;
+    public static double timeScale = 2;
 
     public static PhysicsObject mainObject;
     public static JFrame simulationFrame;
@@ -18,7 +18,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static UI inputManager;
 
 
-    public static Timer physicsTickTimer = new Timer((int)(1000.0/PHYSICS_TICK_SPEED/(double)TIME_SCALE), new ActionListener()
+    public static Timer physicsTickTimer = new Timer((int)(1000.0/PHYSICS_TICK_SPEED), new ActionListener()
     {
         @Override
         public void actionPerformed(ActionEvent e) 
@@ -36,8 +36,10 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     {
         createJFrame();
         //#region DEBUG
-        mainObject = new PhysicsObject(new Vector2(0, 0), 10);
-        mainObject.addForce(new Vector2(100, 0), 1);
+        mainObject = new PhysicsObject(new Vector2(0, 200), 10);
+        mainObject.addForce(new Vector2(1000, 0), 1);
+        PhysicsObject otherObject = new PhysicsObject(new Vector2(0, -50), 1000000000);
+        otherObject.diameter = 100;
         //#endregion
 
         physicsTickTimer.start(); //starts the physics updates 
@@ -57,7 +59,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     
     public static double getDeltaTime()
     {
-        return 1/(double)PHYSICS_TICK_SPEED;
+        return 1/(double)PHYSICS_TICK_SPEED*timeScale;
     }
 }
 

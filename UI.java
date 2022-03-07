@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.Color;
-public class UI extends JPanel implements KeyListener, MouseListener, ActionListener, MouseMotionListener
+public class UI extends JPanel implements KeyListener, MouseListener, MouseMotionListener
 {
 	private final int FPS = 500;
 
@@ -23,6 +23,9 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 	{
 		setBackground(backgroundColor);
 		uiTimer.start();
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        addKeyListener(this);
 	}
 
 	public void paintComponent(Graphics g)
@@ -38,27 +41,21 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 	{
 		g.setColor(physicsObject.color);
         Point screenCoords = toScreenCoords(physicsObject.position, (int)physicsObject.diameter);
-		g.fillOval(screenCoords.x, screenCoords.y, (int)physicsObject.diameter, (int)physicsObject.diameter);
+		g.fillOval(screenCoords.x, screenCoords.y, (int)physicsObject.diameter*scale, (int)physicsObject.diameter*scale);
 	}
 
 	public Point toScreenCoords(Vector2 worldCoords)
 	{
         Point screenPoint = new Point((int)(worldCoords.x*scale + getWidth()/2 - offsetPoint.x), (int)(getHeight()/2 - worldCoords.y*scale - offsetPoint.y));
-        System.out.println("World: " + worldCoords.toString() + "\nScreen: " + screenPoint.toString());
+        //System.out.println("World: " + worldCoords.toString() + "\nScreen: " + screenPoint.toString());
 		return screenPoint;
     }
 
     public Point toScreenCoords(Vector2 worldCoords, int diameter)
     {
-		Point screenPoint = new Point((int)(worldCoords.x*scale + getWidth()/2 - offsetPoint.x) - diameter/2, (int)(getHeight()/2 - worldCoords.y*scale - offsetPoint.y) - diameter/2);
-        System.out.println("World: " + worldCoords.toString() + "\nScreen: " + screenPoint.toString());
+		Point screenPoint = new Point((int)(worldCoords.x*scale + getWidth()/2 - offsetPoint.x) - diameter/2*scale, (int)(getHeight()/2 - worldCoords.y*scale - offsetPoint.y) - diameter/2*scale);
+        //System.out.println("World: " + worldCoords.toString() + "\nScreen: " + screenPoint.toString());
         return screenPoint;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -70,7 +67,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+        requestFocusInWindow();
+        //GameManager.timeScale -= 1;
     }
 
     @Override
@@ -93,8 +91,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, ActionList
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-        
+        GameManager.timeScale += 1;
+        System.out.println(GameManager.timeScale);
     }
 
     @Override

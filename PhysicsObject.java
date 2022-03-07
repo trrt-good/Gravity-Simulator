@@ -1,5 +1,7 @@
 import java.awt.Color;
 
+import javax.swing.text.Position;
+
 public class PhysicsObject
 {
     public double diameter = 10;
@@ -69,7 +71,7 @@ public class PhysicsObject
     public void applyDrag() //applies drag by decreasing velocity. Called each physics update 
     {
         if (drag == 0) return;
-        addForce(new Vector2(-0.1*(velocity.x/Math.abs(velocity.x))*velocity.x*velocity.x*drag, -0.1*(velocity.y/Math.abs(velocity.y))*velocity.y*velocity.y*drag), 0);
+        //TODO: add drag
     }
 
     public void applyGravity() //applies gravity by adding a force twards each gravity object 
@@ -78,14 +80,15 @@ public class PhysicsObject
         int i = 0;
         for (i = 0; i < GameManager.physicsObjects.size(); i++) //applies gravity for each gravity object
         {
-            if (GameManager.physicsObjects.get(i).gravitational && GameManager.physicsObjects.get(i) != this)
+            if (Vector2.difference(position, GameManager.physicsObjects.get(i).position).getMagnitude() > 1)
             {
+                //System.out.print(Vector2.scaledDifference( position, GameManager.physicsObjects.get(i).position, -(GameManager.physicsObjects.get(i).mass*mass)/Math.pow(Vector2.distance(position, GameManager.physicsObjects.get(i).position), 2)).toString());
                 addForce( //adds force to this object based off the vector 
                 Vector2.scaledDifference( //returns a vector that's angle is equal to the one inputed, then scaled proportionally to the specified magnitude 
-                    position, //position of this object's center of mass
-                    GameManager.physicsObjects.get(i).position, //position of the gravity object
-                    -(GameManager.physicsObjects.get(i).mass*mass)/Math.pow(Vector2.distance(position, GameManager.physicsObjects.get(i).position), 2)), 0); 
-                    //^ the magnitude of the force of gravity, calculated by the formula (m1*m2)/d^2   
+                position, //position of this object's center of mass
+                GameManager.physicsObjects.get(i).position, //position of the gravity object
+                -(GameManager.physicsObjects.get(i).mass*mass)/Math.pow(Vector2.distance(position, GameManager.physicsObjects.get(i).position), 2)), 0); 
+                //^ the magnitude of the force of gravity, calculated by the formula (m1*m2)/d^2   
             }
         }
     }
@@ -93,7 +96,6 @@ public class PhysicsObject
     public void updatePosition() //changes the position of the opject based off velocity 
     {
         position = Vector2.add(position, Vector2.multiply(velocity, GameManager.getDeltaTime())); 
-        System.out.println(position.y);
     }
 
     public void checkCollisions()
