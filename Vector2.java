@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
 public class Vector2
 {
     public double x;

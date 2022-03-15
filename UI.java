@@ -1,7 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeSupport;
 import java.awt.Color;
 public class UI extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener
 {
