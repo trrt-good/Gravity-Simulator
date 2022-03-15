@@ -1,11 +1,9 @@
 import java.awt.Color;
 
-import javax.swing.text.Position;
-
 public class PhysicsObject
 {
     public double diameter = 10;
-    public Color color = Color.BLACK;
+    public Color color = Color.WHITE;
 
     public Vector2 position = new Vector2(0, 0); //global position of the PhysicsObject as a vector 
     //local position is always 0,0
@@ -22,6 +20,7 @@ public class PhysicsObject
 
     public boolean collisions = true;
     public boolean gravitational = false; //should this PhysicsObject have it's own graviational pull? 
+    public boolean drawVelocity = true;
 
     //#region constructors 
 

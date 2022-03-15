@@ -14,9 +14,8 @@ public class GameManager  //will manage the physics/gravity objects and preform 
 
     public static PhysicsObject mainObject;
     public static JFrame simulationFrame;
-    public static JPanel uiPanel = new UI();
-    public static UI inputManager;
-
+    public static UI mainUI = new UI();
+    public static JPanel uiPanel = mainUI;
 
     public static Timer physicsTickTimer = new Timer((int)(1000.0/PHYSICS_TICK_SPEED), new ActionListener()
     {
@@ -53,8 +52,6 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         simulationFrame.setSize(1920, 1080);
 		simulationFrame.getContentPane().add(uiPanel);
         simulationFrame.setTitle("Physics Simulation");
-        simulationFrame.addKeyListener(inputManager);
-        simulationFrame.addMouseListener(inputManager);
 		simulationFrame.setVisible(true);
     }
     

@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Graphics;
 public class Vector2
 {
     public double x;
@@ -56,6 +58,13 @@ public class Vector2
         return String.format("(%.1f,%.1f)", x, y);
     }
 
+    public Vector2 add(Vector2 vector2)
+    {
+        x+= vector2.x;
+        y+=vector2.y;
+        return this;
+    }
+
     //static methods: 
 
     public static double distance(Vector2 pos1, Vector2 pos2) //returns the distance between two vectors 
@@ -88,4 +97,5 @@ public class Vector2
     {
         return new Vector2(pos1.x*multiplier, pos1.y*multiplier);
     }
+
 }
