@@ -40,6 +40,10 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         mainObject.diameter = 20;
         PhysicsObject otherObject = new PhysicsObject(new Vector2(0, -50), 500000);
         otherObject.diameter = 100;
+        PhysicsObject otherotherObj = new PhysicsObject(new Vector2(-300, -200), 200000);
+        otherotherObj.diameter = 50;
+        otherotherObj.addForce(new Vector2(-1000000, 7000000), 1);
+
         //#endregion
 
         physicsTickTimer.start(); //starts the physics updates 

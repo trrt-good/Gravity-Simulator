@@ -64,6 +64,31 @@ public class PhysicsObject
         }
     }
 
+    public Vector2[] getGravityVectors()
+    {
+        Vector2[] gravityVectors;
+        int counter = 0;
+
+        for (int i = 0; i < GameManager.physicsObjects.size(); i++) //applies gravity for each gravity object
+        {
+            if (Vector2.difference(position, GameManager.physicsObjects.get(i).position).getMagnitude() > 1)
+            {
+                counter ++;
+            }
+        }
+        gravityVectors = new Vector2[counter];
+        counter = 0;
+        for (int i = 0; i < GameManager.physicsObjects.size(); i++) //applies gravity for each gravity object
+        {
+            if (Vector2.difference(position, GameManager.physicsObjects.get(i).position).getMagnitude() > 1)
+            {
+                gravityVectors[counter] = Vector2.scaledDifference(position, GameManager.physicsObjects.get(i).position, -(GameManager.physicsObjects.get(i).mass*mass)/Math.pow(Vector2.distance(position, GameManager.physicsObjects.get(i).position), 2));
+                counter ++;
+            }
+        } 
+        return gravityVectors;
+    } 
+
 //========================== METHODS USED IN PHYSICS UPDATES ============================
 
 
@@ -88,6 +113,7 @@ public class PhysicsObject
                 GameManager.physicsObjects.get(i).position, //position of the gravity object
                 -(GameManager.physicsObjects.get(i).mass*mass)/Math.pow(Vector2.distance(position, GameManager.physicsObjects.get(i).position), 2)), 0); 
                 //^ the magnitude of the force of gravity, calculated by the formula (m1*m2)/d^2   
+
             }
         }
     }
