@@ -60,7 +60,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
         if (drawVelocityString)
         {
             g.setColor(debugStringColor);
-            g.drawString(physicsObject.velocity.toString(), toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y);
+            g.drawString("" + physicsObject.velocity.getMagnitude(), toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y);
         }
 
         if (drawGvector)
@@ -69,7 +69,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
             for (int i = 0; i < gravityVectors.length; i++)
             {
                 g.setColor(debugGravLine);
-                g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, gravityVectors[i])).x, toScreenCoords(Vector2.add(physicsObject.position, gravityVectors[i])).y);
+                g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], 0.001))).x, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], 0.001))).y);
             }
        }
 	}
