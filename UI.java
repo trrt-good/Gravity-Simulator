@@ -162,6 +162,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        scale -= 0.1*(e.getUnitsToScroll()/Math.abs(e.getUnitsToScroll()));
+        if (e.getUnitsToScroll() != 0)
+            scale -= 0.1*(e.getUnitsToScroll()/Math.abs(e.getUnitsToScroll()));
     }
 }

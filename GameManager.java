@@ -10,7 +10,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static List<PhysicsObject> physicsObjects = new ArrayList<PhysicsObject>();//list containing all physics objects, new physics objects are automatically added to the list. 
 
     public static final int PHYSICS_TICK_SPEED = 200;
-    public static double timeScale = 10;
+    public static double timeScale = 200;
 
     public static PhysicsObject mainObject;
     public static JFrame simulationFrame;
@@ -35,14 +35,15 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     {
         createJFrame();
         //#region DEBUG
-        mainObject = new PhysicsObject(new Vector2(0, 200), 100000);
-        mainObject.addForce(new Vector2(5000000, 0), 1);
-        mainObject.diameter = 20;
-        PhysicsObject otherObject = new PhysicsObject(new Vector2(0, -50), 500000);
-        otherObject.diameter = 100;
-        PhysicsObject otherotherObj = new PhysicsObject(new Vector2(-300, -200), 200000);
-        otherotherObj.diameter = 50;
-        otherotherObj.addForce(new Vector2(-1000000, 7000000), 1);
+        mainObject = new PhysicsObject(new Vector2(0, 200), 400);
+        mainObject.addForce(new Vector2(-500, 0), 1);
+        mainObject.diameter = 8;
+        PhysicsObject otherObject = new PhysicsObject(new Vector2(0, -50), 2000);
+        otherObject.diameter = 40;
+        otherObject.addForce(new Vector2(6000, 400), 1);
+        PhysicsObject otherotherObj = new PhysicsObject(new Vector2(-300, -200), 1000);
+        otherotherObj.diameter = 20;
+        otherotherObj.addForce(new Vector2(1000, -100), 1);
 
         //#endregion
 
