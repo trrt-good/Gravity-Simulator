@@ -15,7 +15,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     
     private Color debugLineColor = Color.RED;
     private Color debugStringColor = new Color(100, 100, 255);
-    private Color debugGravLine = Color.BLUE;
+    private Color debugGravLine = Color.GREEN;
 
 	private Timer uiTimer = new Timer(1000/FPS + 1, new ActionListener()
 	{
@@ -41,7 +41,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
 		super.paintComponent(g);
         for (int i =0; i < GameManager.physicsObjects.size(); i++)
         {
-            drawPhysicsObject(g, GameManager.physicsObjects.get(i), true, false, true);
+            drawPhysicsObject(g, GameManager.physicsObjects.get(i), true, true, true);
         }
 	}
 
@@ -54,13 +54,13 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
         if (drawVelocity)
         {
             g.setColor(debugLineColor);
-            g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, physicsObject.velocity)).x, toScreenCoords(Vector2.add(physicsObject.position, physicsObject.velocity)).y);
+            g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(physicsObject.velocity, GameManager.timeScale/3) )).x, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(physicsObject.velocity, GameManager.timeScale/3))).y);
         }
 
         if (drawVelocityString)
         {
             g.setColor(debugStringColor);
-            g.drawString("" + physicsObject.velocity.getMagnitude(), toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y);
+            g.drawString(String.format("%.1f", physicsObject.velocity.getMagnitude()), toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y);
         }
 
         if (drawGvector)
@@ -69,7 +69,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
             for (int i = 0; i < gravityVectors.length; i++)
             {
                 g.setColor(debugGravLine);
-                g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], 0.001))).x, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], 0.001))).y);
+                g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], GameManager.timeScale/physicsObject.mass))).x, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], GameManager.timeScale/physicsObject.mass))).y);
             }
        }
 	}
