@@ -26,13 +26,12 @@ public class PhysicsObject
 
     public PhysicsObject(){GameManager.physicsObjects.add(this);}
 
-    public PhysicsObject(Vector2 posIn, double massIn, double dragIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, boolean graviationalIn, boolean collisionsIn)
+    public PhysicsObject(Vector2 posIn, double massIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, boolean graviationalIn, boolean collisionsIn)
     {
         //adds this object to the list of physics objects in the game manager class when it is constructed
         GameManager.physicsObjects.add(this);
         position = new Vector2(posIn);
         mass = massIn;
-        drag = dragIn;
         isKinematic = isKnemtcIn;
         freezeRotation = frzRotationIn;
         effectedByGravity = effbyGravIn;
@@ -90,13 +89,6 @@ public class PhysicsObject
     } 
 
 //========================== METHODS USED IN PHYSICS UPDATES ============================
-
-
-    public void applyDrag() //applies drag by decreasing velocity. Called each physics update 
-    {
-        if (drag == 0) return;
-        //TODO: add drag
-    }
 
     public void applyGravity() //applies gravity by adding a force twards each gravity object 
     {

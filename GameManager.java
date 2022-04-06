@@ -24,7 +24,6 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         {
             for (int i = 0; i < physicsObjects.size(); i++)
             {
-                physicsObjects.get(i).applyDrag();
                 physicsObjects.get(i).applyGravity();
                 physicsObjects.get(i).updatePosition();
             }
@@ -46,7 +45,6 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         object3.diameter = 20;
         object3.addForce(new Vector2(1000, -100), 1);
 
-        
         physicsTickTimer.start(); //starts the physics updates 
     }
 
