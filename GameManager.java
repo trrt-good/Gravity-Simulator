@@ -12,7 +12,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static final int PHYSICS_TICK_SPEED = 200;
     public static double timeScale = 200;
 
-    public static PhysicsObject mainObject;
+    public static PhysicsObject object1;
     public static JFrame simulationFrame;
     public static UI mainUI = new UI();
     public static JPanel uiPanel = mainUI;
@@ -34,19 +34,19 @@ public class GameManager  //will manage the physics/gravity objects and preform 
     public static void main (String [] args)
     {
         createJFrame();
-        //#region DEBUG
-        mainObject = new PhysicsObject(new Vector2(0, 200), 400);
-        mainObject.addForce(new Vector2(-500, 0), 1);
-        mainObject.diameter = 8;
-        PhysicsObject otherObject = new PhysicsObject(new Vector2(0, -50), 2000);
-        otherObject.diameter = 40;
-        otherObject.addForce(new Vector2(6000, 400), 1);
-        PhysicsObject otherotherObj = new PhysicsObject(new Vector2(-300, -200), 1000);
-        otherotherObj.diameter = 20;
-        otherotherObj.addForce(new Vector2(1000, -100), 1);
 
-        //#endregion
+        //Create physics objects to simulate: 
+        object1 = new PhysicsObject(new Vector2(0, 200), 400);
+        object1.addForce(new Vector2(-500, 0), 1);
+        object1.diameter = 8;
+        PhysicsObject object2 = new PhysicsObject(new Vector2(0, -50), 2000);
+        object2.diameter = 40;
+        object2.addForce(new Vector2(6000, 400), 1);
+        PhysicsObject object3 = new PhysicsObject(new Vector2(-300, -200), 1000);
+        object3.diameter = 20;
+        object3.addForce(new Vector2(1000, -100), 1);
 
+        
         physicsTickTimer.start(); //starts the physics updates 
     }
 
