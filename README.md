@@ -2,6 +2,8 @@
 
 About:
   - A simple program which can display and simulate the gravity and interactions between multiple objects.
+  
+![image](https://cdn.discordapp.com/attachments/903515599097954354/1008141896486494218/unknown.png)
 
 Classes:
   - Vector2: stores all positions, directions and contains some basic 2d vector math methods. 
