@@ -6,51 +6,64 @@ public class PhysicsObject
     public Color color = Color.LIGHT_GRAY;
 
     public Vector2 position = new Vector2(0, 0); //global position of the PhysicsObject as a vector 
+    public Vector2 originalPosition = new Vector2(0, 0); //Position that was originally set for the PhysicsObject
     //local position is always 0,0
 
-    public double mass = 10; //Mass of the PhysicsObject 
+    public double mass = 10; //Mass of the PhysicsObject
+    public double originalMass = 10; //The mass that was originally set for the PhysicsObject
 
-    public double drag = 0.01; //Coefficient of drag
+    public double drag = 0.0001; //Coefficient of drag
 
     public Vector2 velocity = new Vector2(0, 0); //Linear velocity of the PhysicsObject 
 
     public boolean isKinematic = false; //should this PhysicsObject be taken out of physics control?
+    public boolean kinOG = false;
     public boolean freezeRotation = false; //freezes rotation if true 
+    public boolean frzRotOG = false;
     public boolean effectedByGravity = true; //should this PhysicsObject be effected by Gravity?
+    public boolean effctGvtyOG = true;
 
     public boolean collisions = true;
-    public boolean gravitational = false; //should this PhysicsObject have it's own graviational pull? 
+    public boolean collsnsOG = true;
+    public boolean gravitational = false; //should this PhysicsObject have its own graviational pull? 
     public boolean drawVelocity = true;
 
     //#region constructors 
 
-    public PhysicsObject(){GameManager.physicsObjects.add(this);}
+    public PhysicsObject()
+    {
+        GameManager.physicsObjects.add(this);
+    }
 
     public PhysicsObject(Vector2 posIn, double massIn, boolean isKnemtcIn, boolean frzRotationIn, boolean effbyGravIn, boolean graviationalIn, boolean collisionsIn)
     {
         //adds this object to the list of physics objects in the game manager class when it is constructed
         GameManager.physicsObjects.add(this);
         position = new Vector2(posIn);
+        originalPosition = new Vector2(posIn);
         mass = massIn;
-        isKinematic = isKnemtcIn;
-        freezeRotation = frzRotationIn;
-        effectedByGravity = effbyGravIn;
+        originalMass = massIn;
+        isKinematic = kinOG = isKnemtcIn;
+        freezeRotation = frzRotOG = frzRotationIn;
+        effectedByGravity = effctGvtyOG = effbyGravIn;
         gravitational = graviationalIn;
-        collisions = collisionsIn;
+        collisions = collsnsOG = collisionsIn;
     }
 
     public PhysicsObject(Vector2 posIn, double massIn)
     {
         GameManager.physicsObjects.add(this);
         position = new Vector2(posIn);
+        originalPosition = new Vector2(posIn);
         mass = massIn;
+        originalMass = massIn;
     }
 
     //#endregion 
 
     public void addForce(Vector2 forceIn, int forceType) //forceType 0 is force over time, forceType 1 is instant force applied
     {
-        if (isKinematic == true) return;
+        if (isKinematic) return;
         if (forceType == 0)
         {
             velocity.x += (forceIn.x*GameManager.getDeltaTime())/mass;
@@ -61,6 +74,9 @@ public class PhysicsObject
             velocity.x += (forceIn.x)/mass;
             velocity.y += (forceIn.y)/mass;
         }
+
+        velocity.x *= (1 - drag);
+        velocity.y *= (1 - drag);
     }
 
     public Vector2[] getGravityVectors()

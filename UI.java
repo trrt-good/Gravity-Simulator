@@ -1,12 +1,18 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.*;
 import java.awt.Color;
+
 public class UI extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener
 {
-	private final int FPS = 500;
+	private final int FPS = 60;
 
 	private Color backgroundColor = new Color(0, 0, 0);
+    private Color controlPanelBGColor = new Color(20, 20, 20);
 	private double scale = 1;
 	private Point offsetPoint = new Point(0, 0);
 
@@ -16,6 +22,21 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     private Color debugLineColor = Color.RED;
     private Color debugStringColor = new Color(100, 100, 255);
     private Color debugGravLine = Color.GREEN;
+
+    private JSlider diameter;
+    private JSlider timeScale;
+
+    private JCheckBox kinematic;
+    private JCheckBox gravity;
+    private JCheckBox freezeRotation;
+    private JCheckBox collisions;
+
+    private JLabel xPos;
+    private JLabel yPos;
+
+    private JLabel objLabel;
+
+    private int objSelected = 0;
 
 	private Timer uiTimer = new Timer(1000/FPS + 1, new ActionListener()
 	{
@@ -28,14 +49,19 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
 
 	public UI()
 	{
+        setLayout(new BorderLayout());
 		setBackground(backgroundColor);
 		uiTimer.start();
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
         addMouseWheelListener(this);
+
+        ControlPanel controlPan = new ControlPanel();
+        add(controlPan, BorderLayout.SOUTH);
 	}
 
+    @Override
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -43,6 +69,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
         {
             drawPhysicsObject(g, GameManager.physicsObjects.get(i), true, true, true);
         }
+        xPos.setText("X: " + (int)(GameManager.physicsObjects.get(objSelected).position.x));
+        yPos.setText("Y: " + (int)(GameManager.physicsObjects.get(objSelected).position.y));
 	}
 
 	public void drawPhysicsObject(Graphics g, PhysicsObject physicsObject, boolean drawVelocity, boolean drawVelocityString, boolean drawGvector)
@@ -71,7 +99,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
                 g.setColor(debugGravLine);
                 g.drawLine(toScreenCoords(physicsObject.position).x, toScreenCoords(physicsObject.position).y, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], GameManager.timeScale/physicsObject.mass))).x, toScreenCoords(Vector2.add(physicsObject.position, Vector2.multiply(gravityVectors[i], GameManager.timeScale/physicsObject.mass))).y);
             }
-       }
+        }
 	}
 
 	public Point toScreenCoords(Vector2 worldCoords)
@@ -99,53 +127,18 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
+    public void mousePressed(MouseEvent e)
+    {
         requestFocusInWindow();
         clickPoint = e.getPoint();
         clickOffsetPoint = offsetPoint;
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e)
+    {
         GameManager.timeScale += 1;
         System.out.println(GameManager.timeScale);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -155,14 +148,277 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+    public void mouseWheelMoved(MouseWheelEvent e)
+    {
+        if (e.getUnitsToScroll() != 0)
+            scale -= 0.1*(e.getUnitsToScroll()/Math.abs(e.getUnitsToScroll()));
     }
 
     @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        if (e.getUnitsToScroll() != 0)
-            scale -= 0.1*(e.getUnitsToScroll()/Math.abs(e.getUnitsToScroll()));
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+    @Override
+    public void keyPressed(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    public class ControlPanel extends JPanel implements ActionListener, ChangeListener
+    {
+        public ControlPanel()
+        {
+            setLayout(new BorderLayout());
+            JPanel centerGrid = new JPanel();
+            centerGrid.setLayout(new GridLayout(1, 4));
+            centerGrid.setBackground(controlPanelBGColor);
+            setBackground(controlPanelBGColor);
+            setPreferredSize(new Dimension(1920, 170));
+
+            JPanel buttonAndMenu1 = new JPanel();
+            buttonAndMenu1.setPreferredSize(new Dimension(460, 120));
+            JPanel btnAndMenuMaster = new JPanel();
+            btnAndMenuMaster.setPreferredSize(new Dimension(130, 120));
+            btnAndMenuMaster.setBackground(controlPanelBGColor);
+            buttonAndMenu1.setBackground(controlPanelBGColor);
+            JButton resetAll = makeButton("Reset All");
+            JButton resetPos = makeButton("Reset Positions");
+            JMenuBar objectSelection = makeMenuBar();
+            btnAndMenuMaster.add(resetAll);
+            btnAndMenuMaster.add(resetPos);
+            JPanel spacePan = new JPanel();
+            spacePan.setBackground(controlPanelBGColor);
+            spacePan.setPreferredSize(new Dimension(120, 1));
+            btnAndMenuMaster.add(spacePan);
+            btnAndMenuMaster.add(objectSelection);
+            buttonAndMenu1.add(btnAndMenuMaster);
+
+            JPanel sliders2 = new JPanel();
+            sliders2.setBackground(controlPanelBGColor);
+            sliders2.setLayout(new GridLayout(2, 1));
+            JPanel diameterPanel = new JPanel();
+            diameterPanel.setBackground(controlPanelBGColor);;
+            JPanel timeScalePanel = new JPanel();
+            timeScalePanel.setBackground(controlPanelBGColor);
+            JLabel diam = new JLabel("Diameter");
+            diam.setForeground(Color.WHITE);
+            JLabel timeSc = new JLabel("Timescale");
+            timeSc.setForeground(Color.WHITE);
+            diameter = makeSlider(JSlider.HORIZONTAL, 1, 100, (int)(GameManager.physicsObjects.get(objSelected).diameter), controlPanelBGColor, 20);
+            diameter.setPreferredSize(new Dimension(220, 50));
+            timeScale = makeSlider(JSlider.HORIZONTAL, 0, 200, (int)(GameManager.timeScale), controlPanelBGColor, 40);
+            timeScale.setPreferredSize(new Dimension(220, 50));
+            diameterPanel.add(diam);
+            diameterPanel.add(diameter);
+            sliders2.add(diameterPanel);
+            timeScalePanel.add(timeSc);
+            timeScalePanel.add(timeScale);
+            sliders2.add(timeScalePanel);
+
+            JPanel checkBoxes3 = makeCheckBoxes();
+
+            JPanel position4 = new JPanel();
+            JPanel labelsMaster = new JPanel();
+            labelsMaster.setPreferredSize(new Dimension(70, 120));
+            labelsMaster.setBackground(controlPanelBGColor);
+            JLabel position = new JLabel("Position");
+            xPos = new JLabel("X: " + GameManager.physicsObjects.get(objSelected).position.x);
+            yPos = new JLabel("Y: " + GameManager.physicsObjects.get(objSelected).position.y);
+            position.setForeground(Color.WHITE);
+            xPos.setForeground(Color.WHITE);
+            yPos.setForeground(Color.WHITE);
+            labelsMaster.add(position);
+            labelsMaster.add(xPos);
+            labelsMaster.add(yPos);
+
+            position4.add(labelsMaster);
+            position4.setPreferredSize(new Dimension(460, 120));
+            position4.setBackground(controlPanelBGColor);
+
+            centerGrid.add(buttonAndMenu1);
+            centerGrid.add(sliders2);
+            centerGrid.add(checkBoxes3);
+            centerGrid.add(position4);
+
+            objLabel = new JLabel("Selected Object: " + (objSelected + 1));
+            objLabel.setForeground(Color.ORANGE);
+            objLabel.setHorizontalAlignment(JLabel.CENTER);
+            objLabel.setFont(new Font("Dialog", Font.BOLD, 15));
+            objLabel.setBorder(BorderFactory.createEmptyBorder(7, 7, 0, 0));
+
+            add(objLabel, BorderLayout.NORTH);
+            add(centerGrid, BorderLayout.CENTER);
+        }
+
+        public JButton makeButton(String name)
+        {
+            JButton button = new JButton(name);
+            button.addActionListener(this);
+            button.setFocusPainted(true);
+
+            return button;
+        }
+
+        public JMenuBar makeMenuBar()
+        {
+            JMenuBar bar = new JMenuBar();
+            JMenu selection = new JMenu("Select Object");
+
+            for (int i = 0; i < GameManager.physicsObjects.size(); i++)
+            {
+                JMenuItem object = new JMenuItem("Object #" + (i + 1));
+                selection.add(object);
+                object.addActionListener(this);
+            }
+
+            bar.add(selection);
+
+            return bar;
+        }
+
+        public JSlider makeSlider(int orient, int min, int max, int initialValue, Color bgColor, int tickSpaces)
+        {
+            JSlider slider = new JSlider(orient, min, max, initialValue)
+            {
+                @Override
+                public void updateUI()
+                {
+                    setUI(new SliderUI.CustomSliderUI(this));
+                }
+            };
+            slider.setBackground(bgColor);
+            slider.setForeground(Color.WHITE);
+            slider.setMajorTickSpacing(tickSpaces);
+            slider.setPaintTicks(true);
+            slider.setLabelTable(slider.createStandardLabels(tickSpaces));
+            slider.setPaintLabels(true);
+            slider.addChangeListener(this);
+
+            return slider;
+        }
+
+        public JPanel makeCheckBoxes()
+        {
+            JPanel checkBoxPanel = new JPanel();
+            checkBoxPanel.setPreferredSize(new Dimension(460, 120));
+            checkBoxPanel.setBackground(controlPanelBGColor);
+
+            kinematic = new JCheckBox("Kinematic");
+            gravity = new JCheckBox("Gravity");
+            freezeRotation = new JCheckBox("Freeze Rotation");
+            collisions = new JCheckBox("Collisions");
+
+            checkBoxPanel.add(kinematic);
+            checkBoxPanel.add(gravity);
+            checkBoxPanel.add(freezeRotation);
+            checkBoxPanel.add(collisions);
+
+            kinematic.addActionListener(this);
+            gravity.addActionListener(this);
+            freezeRotation.addActionListener(this);
+            collisions.addActionListener(this);
+
+            kinematic.setSelected(GameManager.physicsObjects.get(objSelected).isKinematic);
+            gravity.setSelected(GameManager.physicsObjects.get(objSelected).effectedByGravity);
+            freezeRotation.setSelected(GameManager.physicsObjects.get(objSelected).freezeRotation);
+            collisions.setSelected(GameManager.physicsObjects.get(objSelected).collisions);
+
+            kinematic.setForeground(Color.WHITE);
+            gravity.setForeground(Color.WHITE);
+            freezeRotation.setForeground(Color.WHITE);
+            collisions.setForeground(Color.WHITE);
+
+            return checkBoxPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            PhysicsObject currentObj;
+            String command = e.getActionCommand();
+            if (command.equals("Reset All"))
+            {
+                for (int i = 0; i < GameManager.physicsObjects.size(); i++)
+                {
+                    currentObj = GameManager.physicsObjects.get(i);
+                    currentObj.mass = currentObj.originalMass;
+                    currentObj.position = new Vector2(currentObj.originalPosition);
+                    currentObj.velocity = new Vector2(0, 0);
+                    currentObj.isKinematic = currentObj.kinOG;
+                    currentObj.freezeRotation = currentObj.frzRotOG;
+                    currentObj.effectedByGravity = currentObj.effctGvtyOG;
+                    currentObj.collisions = currentObj.collsnsOG;
+                    currentObj.diameter = GameManager.originalDiameters.get(i);
+
+                    List<Vector2> keys = new ArrayList<Vector2>(GameManager.objForceInfo.keySet());
+                    currentObj.addForce(new Vector2(keys.get(i)), GameManager.objForceInfo.get(keys.get(i)));
+                }
+
+                currentObj = GameManager.physicsObjects.get(objSelected);
+                diameter.setValue((int)(currentObj.diameter));
+                kinematic.setSelected(currentObj.isKinematic);
+                gravity.setSelected(currentObj.effectedByGravity);
+                freezeRotation.setSelected(currentObj.freezeRotation);
+                collisions.setSelected(currentObj.collisions);
+
+                objLabel.setText("Selected Object: " + (objSelected + 1));
+            }
+            else if (command.equals("Reset Positions"))
+            {
+                for (int i = 0; i < GameManager.physicsObjects.size(); i++)
+                {
+                    currentObj = GameManager.physicsObjects.get(i);
+                    currentObj.mass = currentObj.originalMass;
+                    currentObj.position = new Vector2(currentObj.originalPosition);
+                    currentObj.velocity = new Vector2(0, 0);
+
+                    List<Vector2> keys = new ArrayList<Vector2>(GameManager.objForceInfo.keySet());
+                    currentObj.addForce(new Vector2(keys.get(i)), GameManager.objForceInfo.get(keys.get(i)));
+                }
+            }
+            else if (command.startsWith("Object #"))
+            {
+                objSelected = Integer.parseInt(command.substring(8)) - 1;
+                currentObj = GameManager.physicsObjects.get(objSelected);
+
+                diameter.setValue((int)(currentObj.diameter));
+                kinematic.setSelected(currentObj.isKinematic);
+                gravity.setSelected(currentObj.effectedByGravity);
+                freezeRotation.setSelected(currentObj.freezeRotation);
+                collisions.setSelected(currentObj.collisions);
+
+                objLabel.setText("Selected Object: " + (objSelected + 1));
+            }
+            else if (command.equals("Kinematic"))
+            {
+                GameManager.physicsObjects.get(objSelected).isKinematic = kinematic.isSelected();
+            }
+            else if (command.equals("Gravity"))
+            {
+                GameManager.physicsObjects.get(objSelected).effectedByGravity = gravity.isSelected();
+            }
+            else if (command.equals("Freeze Rotation"))
+            {
+                GameManager.physicsObjects.get(objSelected).freezeRotation = freezeRotation.isSelected();
+            }
+            else if (command.equals("Collisions"))
+            {
+                GameManager.physicsObjects.get(objSelected).collisions = collisions.isSelected();
+            }
+        }
+
+        @Override
+        public void stateChanged(ChangeEvent e)
+        {
+            if (diameter == e.getSource())
+                GameManager.physicsObjects.get(objSelected).diameter = diameter.getValue();
+            else
+                GameManager.timeScale = timeScale.getValue();
+        }
     }
 }
