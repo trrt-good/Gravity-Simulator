@@ -63,7 +63,7 @@ public class GameManager  //will manage the physics/gravity objects and preform 
         
         simulationFrame = new JFrame();
         simulationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        simulationFrame.setSize(1920, 1080);
+        simulationFrame.setSize(1080, 720);
         simulationFrame.setLocation(0, 0);
 		simulationFrame.getContentPane().add(mainUI);
         simulationFrame.setTitle("Physics Simulation");

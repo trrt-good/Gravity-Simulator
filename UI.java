@@ -13,7 +13,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
 
 	private Color backgroundColor = new Color(0, 0, 0);
     private Color controlPanelBGColor = new Color(20, 20, 20);
-	private double scale = 1;
+    private final double defaultScale = 0.7;
+	private double scale = defaultScale;
 	private Point offsetPoint = new Point(0, 0);
 
     private Point clickPoint;
@@ -22,6 +23,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     private Color debugLineColor = Color.RED;
     private Color debugStringColor = new Color(100, 100, 255);
     private Color debugGravLine = Color.GREEN;
+    private Color selectedObjColor = Color.MAGENTA;
+    private boolean debugLines = true;
 
     private JSlider diameter;
     private JSlider timeScale;
@@ -29,7 +32,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     private JCheckBox kinematic;
     private JCheckBox gravity;
     private JCheckBox freezeRotation;
-    private JCheckBox collisions;
+    private JCheckBox showVelocities;
 
     private JLabel xPos;
     private JLabel yPos;
@@ -67,7 +70,7 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
 		super.paintComponent(g);
         for (int i =0; i < GameManager.physicsObjects.size(); i++)
         {
-            drawPhysicsObject(g, GameManager.physicsObjects.get(i), true, true, true);
+            drawPhysicsObject(g, GameManager.physicsObjects.get(i), debugLines, debugLines, debugLines);
         }
         xPos.setText("X: " + (int)(GameManager.physicsObjects.get(objSelected).position.x));
         yPos.setText("Y: " + (int)(GameManager.physicsObjects.get(objSelected).position.y));
@@ -173,6 +176,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
     {
         public ControlPanel()
         {
+            GameManager.physicsObjects.get(0).color = selectedObjColor;
+
             setLayout(new BorderLayout());
             JPanel centerGrid = new JPanel();
             centerGrid.setLayout(new GridLayout(1, 4));
@@ -209,10 +214,11 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
             diam.setForeground(Color.WHITE);
             JLabel timeSc = new JLabel("Timescale");
             timeSc.setForeground(Color.WHITE);
-            diameter = makeSlider(JSlider.HORIZONTAL, 1, 100, (int)(GameManager.physicsObjects.get(objSelected).diameter), controlPanelBGColor, 20);
+            diameter = makeSlider(JSlider.HORIZONTAL, 1, 200, (int)(GameManager.physicsObjects.get(objSelected).diameter), controlPanelBGColor, 30);
             diameter.setPreferredSize(new Dimension(220, 50));
             timeScale = makeSlider(JSlider.HORIZONTAL, 0, 200, (int)(GameManager.timeScale), controlPanelBGColor, 40);
             timeScale.setPreferredSize(new Dimension(220, 50));
+
             diameterPanel.add(diam);
             diameterPanel.add(diameter);
             sliders2.add(diameterPanel);
@@ -311,32 +317,32 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
             kinematic = new JCheckBox("Kinematic");
             gravity = new JCheckBox("Gravity");
             freezeRotation = new JCheckBox("Freeze Rotation");
-            collisions = new JCheckBox("Collisions");
+            showVelocities = new JCheckBox("Show Velocities");
 
             kinematic.setBackground(controlPanelBGColor);
             gravity.setBackground(controlPanelBGColor);
             freezeRotation.setBackground(controlPanelBGColor);
-            collisions.setBackground(controlPanelBGColor);
+            showVelocities.setBackground(controlPanelBGColor);
 
             checkBoxPanel.add(kinematic);
             checkBoxPanel.add(gravity);
             checkBoxPanel.add(freezeRotation);
-            checkBoxPanel.add(collisions);
+            checkBoxPanel.add(showVelocities);
 
             kinematic.addActionListener(this);
             gravity.addActionListener(this);
             freezeRotation.addActionListener(this);
-            collisions.addActionListener(this);
+            showVelocities.addActionListener(this);
 
             kinematic.setSelected(GameManager.physicsObjects.get(objSelected).isKinematic);
             gravity.setSelected(GameManager.physicsObjects.get(objSelected).effectedByGravity);
             freezeRotation.setSelected(GameManager.physicsObjects.get(objSelected).freezeRotation);
-            collisions.setSelected(GameManager.physicsObjects.get(objSelected).collisions);
+            showVelocities.setSelected(true);
 
             kinematic.setForeground(Color.WHITE);
             gravity.setForeground(Color.WHITE);
             freezeRotation.setForeground(Color.WHITE);
-            collisions.setForeground(Color.WHITE);
+            showVelocities.setForeground(Color.WHITE);
 
             return checkBoxPanel;
         }
@@ -359,6 +365,8 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
                     currentObj.effectedByGravity = currentObj.effctGvtyOG;
                     currentObj.collisions = currentObj.collsnsOG;
                     currentObj.diameter = GameManager.originalDiameters.get(i);
+                    offsetPoint = new Point(0, 0);
+                    scale = defaultScale;
 
                     List<Vector2> keys = new ArrayList<Vector2>(GameManager.objForceInfo.keySet());
                     currentObj.addForce(new Vector2(keys.get(i)), GameManager.objForceInfo.get(keys.get(i)));
@@ -369,7 +377,6 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
                 kinematic.setSelected(currentObj.isKinematic);
                 gravity.setSelected(currentObj.effectedByGravity);
                 freezeRotation.setSelected(currentObj.freezeRotation);
-                collisions.setSelected(currentObj.collisions);
 
                 objLabel.setText("Selected Object: " + (objSelected + 1));
             }
@@ -391,11 +398,17 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
                 objSelected = Integer.parseInt(command.substring(8)) - 1;
                 currentObj = GameManager.physicsObjects.get(objSelected);
 
+                for (int i = 0; i < GameManager.physicsObjects.size(); i ++)
+                {
+                    GameManager.physicsObjects.get(i).color = GameManager.physicsObjects.get(i).defaultColor;
+                }
+                currentObj.color = selectedObjColor;
+
                 diameter.setValue((int)(currentObj.diameter));
                 kinematic.setSelected(currentObj.isKinematic);
                 gravity.setSelected(currentObj.effectedByGravity);
                 freezeRotation.setSelected(currentObj.freezeRotation);
-                collisions.setSelected(currentObj.collisions);
+                showVelocities.setSelected(currentObj.collisions);
 
                 objLabel.setText("Selected Object: " + (objSelected + 1));
             }
@@ -411,9 +424,9 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
             {
                 GameManager.physicsObjects.get(objSelected).freezeRotation = freezeRotation.isSelected();
             }
-            else if (command.equals("Collisions"))
+            else if (command.equals("Show Velocities"))
             {
-                GameManager.physicsObjects.get(objSelected).collisions = collisions.isSelected();
+                debugLines = showVelocities.isSelected();
             }
         }
 
@@ -421,7 +434,10 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
         public void stateChanged(ChangeEvent e)
         {
             if (diameter == e.getSource())
+            {
                 GameManager.physicsObjects.get(objSelected).diameter = diameter.getValue();
+                GameManager.physicsObjects.get(objSelected).mass = GameManager.physicsObjects.get(objSelected).originalMass + diameter.getValue()*diameter.getValue();
+            }
             else
                 GameManager.timeScale = timeScale.getValue();
         }

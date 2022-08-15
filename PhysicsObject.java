@@ -3,7 +3,9 @@ import java.awt.Color;
 public class PhysicsObject
 {
     public double diameter = 10;
-    public Color color = Color.LIGHT_GRAY;
+
+    public final Color defaultColor = Color.LIGHT_GRAY;
+    public Color color = defaultColor;
 
     public Vector2 position = new Vector2(0, 0); //global position of the PhysicsObject as a vector 
     public Vector2 originalPosition = new Vector2(0, 0); //Position that was originally set for the PhysicsObject
