@@ -313,6 +313,11 @@ public class UI extends JPanel implements KeyListener, MouseListener, MouseMotio
             freezeRotation = new JCheckBox("Freeze Rotation");
             collisions = new JCheckBox("Collisions");
 
+            kinematic.setBackground(controlPanelBGColor);
+            gravity.setBackground(controlPanelBGColor);
+            freezeRotation.setBackground(controlPanelBGColor);
+            collisions.setBackground(controlPanelBGColor);
+
             checkBoxPanel.add(kinematic);
             checkBoxPanel.add(gravity);
             checkBoxPanel.add(freezeRotation);
